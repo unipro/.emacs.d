@@ -109,7 +109,17 @@ locate PACKAGE."
 
 (global-set-key [remap dabbrev-expand] 'hippie-expand)
 
- 
+(require-package 'browse-kill-ring)
+(setq browse-kill-ring-separator "\f")
+(global-set-key (kbd "M-Y") 'browse-kill-ring)
+(with-eval-after-load 'browse-kill-ring
+  (define-key browse-kill-ring-mode-map (kbd "C-g") 'browse-kill-ring-quit)
+  (define-key browse-kill-ring-mode-map (kbd "M-n") 'browse-kill-ring-forward)
+  (define-key browse-kill-ring-mode-map (kbd "M-p") 'browse-kill-ring-previous))
+(with-eval-after-load 'page-break-lines
+  (push 'browse-kill-ring-mode page-break-lines-modes))
+
+
 ;;----------------------------------------------------------------------------
 ;; Locales
 ;;----------------------------------------------------------------------------
@@ -153,9 +163,23 @@ locate PACKAGE."
 
 
 ;;----------------------------------------------------------------------------
+;; Whitespace
+;;----------------------------------------------------------------------------
+(require-package 'whitespace-cleanup-mode)
+(global-whitespace-cleanup-mode t)
+
+
+;;----------------------------------------------------------------------------
+;; Git
+;;----------------------------------------------------------------------------
+(require-package 'magit)
+
+
+;;----------------------------------------------------------------------------
 ;; misc
 ;;----------------------------------------------------------------------------
 (global-set-key (kbd "M-i") 'imenu)
+(global-set-key (kbd "C-x C-b") 'ibuffer)
 
 
 ;;----------------------------------------------------------------------------
