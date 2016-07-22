@@ -14,9 +14,13 @@
  '(ido-enable-flex-matching t)
  '(ido-everywhere t)
  '(ido-mode (quote both) nil (ido))
+ '(inhibit-startup-echo-area-message "Byungwan Jun")
+ '(inhibit-startup-screen t)
  '(safe-local-variable-values (quote ((no-byte-compile t))))
  '(shift-select-mode nil)
  '(tramp-default-method "ssh")
+ '(use-dialog-box nil)
+ '(use-file-dialog nil)
  '(windmove-wrap-around t)
  '(winner-mode t))
 (custom-set-faces
