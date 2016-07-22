@@ -16,6 +16,7 @@
  '(ido-mode (quote both) nil (ido))
  '(safe-local-variable-values (quote ((no-byte-compile t))))
  '(shift-select-mode nil)
+ '(tramp-default-method "ssh")
  '(windmove-wrap-around t)
  '(winner-mode t))
 (custom-set-faces
