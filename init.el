@@ -11,6 +11,8 @@
 ;; Bootstrap config
 ;;----------------------------------------------------------------------------
 (setq custom-file (expand-file-name "init.ec" user-emacs-directory))
+(setq gc-cons-threshold (* 128 1024 1024))
+
 
 ;;----------------------------------------------------------------------------
 ;; Package manager settings
@@ -63,8 +65,14 @@ locate PACKAGE."
 
 
 ;;----------------------------------------------------------------------------
-;; TRAMP
+;; Buffers, Files, Directories
 ;;----------------------------------------------------------------------------
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+
+(setq recentf-mode t)
+(setq recentf-max-saved-items 1000)
+(setq recentf-exclude '("/tmp/" "/ssh:"))
+
 (defun sudo ()
   "Use TRAMP to `sudo' the current buffer"
   (interactive)
@@ -72,34 +80,17 @@ locate PACKAGE."
     (find-alternate-file
      (concat "/sudo:root@localhost:"
 	     buffer-file-name))))
+(setq tramp-default-method "ssh")
 
+(with-eval-after-load 'dired
+  (require 'dired-x)
+  (setq dired-omit-mode t)
+  (setq-default dired-omit-files-p t)
+  (setq dired-omit-files "^\\.?#\\|^\\.$\\|^\\.\\.$\\|^\\..+$"))
 
-;;----------------------------------------------------------------------------
-;; dired
-;;----------------------------------------------------------------------------
-(require 'dired-x)
-(setq dired-omit-mode t)
-(setq-default dired-omit-files-p t)
-
-
-;;----------------------------------------------------------------------------
-;; flycheck
-;;----------------------------------------------------------------------------
-(when (maybe-require-package 'flycheck)
-  (add-hook 'after-init-hook 'global-flycheck-mode)
-
-  ;; Override default flycheck triggers
-  (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled)
-	flycheck-idle-change-delay 0.8)
-
-  (setq flycheck-display-errors-function #'flycheck-display-error-messages-unless-error-list))
-
-
-;;----------------------------------------------------------------------------
-;; undo-tree
-;;----------------------------------------------------------------------------
-(require-package 'undo-tree)
-(diminish 'undo-tree-mode)
+(ido-mode t)
+(setq ido-everywhere t)
+(setq ido-enable-flex-matching t)
 
 
 ;;----------------------------------------------------------------------------
@@ -119,6 +110,10 @@ locate PACKAGE."
 (with-eval-after-load 'page-break-lines
   (push 'browse-kill-ring-mode page-break-lines-modes))
 
+(require-package 'undo-tree)
+(diminish 'undo-tree-mode)
+(global-undo-tree-mode t)
+
 
 ;;----------------------------------------------------------------------------
 ;; Locales
@@ -126,23 +121,17 @@ locate PACKAGE."
 (when window-system
   (setq coding-system-for-read 'utf-8))
 
+(setq default-input-method "korean-hangul")
+
 
 ;;----------------------------------------------------------------------------
-;; windmove
+;; Windows, Frames, Fonts, Themes
 ;;----------------------------------------------------------------------------
 (windmove-default-keybindings)
+(setq shift-select-mode nil)
+(setq windmove-wrap-around t)
+(winner-mode t)
 
-
-;;----------------------------------------------------------------------------
-;; helm
-;;----------------------------------------------------------------------------
-(require-package 'helm)
-(require 'helm-config)
-
-
-;;----------------------------------------------------------------------------
-;; Fonts
-;;----------------------------------------------------------------------------
 (when (display-graphic-p)
   (let ((fontset "fontset-default"))
     (cond ((member "Droid Sans Mono" (font-family-list))
@@ -155,31 +144,51 @@ locate PACKAGE."
       (set-fontset-font fontset 'hangul
                         '("NanumGothicCoding" . "unicode-bmp")))))
 
-
-;;----------------------------------------------------------------------------
-;; Themes
-;;----------------------------------------------------------------------------
 (require-package 'color-theme-sanityinc-solarized)
 
+(setq tool-bar-mode nil)
+(setq scroll-bar-mode nil)
+(setq use-dialog-box nil)
+(setq use-file-dialog nil)
+
+(global-set-key (kbd "M-i") 'imenu)
+
+(setq inhibit-startup-screen t)
+(setq inhibit-startup-echo-area-message "Byungwan Jun")
+
 
 ;;----------------------------------------------------------------------------
-;; Whitespace
+;; Syntax utilities
 ;;----------------------------------------------------------------------------
+(when (maybe-require-package 'flycheck)
+  (add-hook 'after-init-hook 'global-flycheck-mode)
+
+  ;; Override default flycheck triggers
+  (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled)
+	flycheck-idle-change-delay 0.8)
+
+  (setq flycheck-display-errors-function
+	#'flycheck-display-error-messages-unless-error-list))
+
 (require-package 'whitespace-cleanup-mode)
 (global-whitespace-cleanup-mode t)
+
+(setq indicate-empty-lines t)
+
+(electric-pair-mode t)
+
+
+;;----------------------------------------------------------------------------
+;; Auto Completion
+;;----------------------------------------------------------------------------
+(require-package 'helm)
+(require 'helm-config)
 
 
 ;;----------------------------------------------------------------------------
 ;; Git
 ;;----------------------------------------------------------------------------
 (require-package 'magit)
-
-
-;;----------------------------------------------------------------------------
-;; misc
-;;----------------------------------------------------------------------------
-(global-set-key (kbd "M-i") 'imenu)
-(global-set-key (kbd "C-x C-b") 'ibuffer)
 
 
 ;;----------------------------------------------------------------------------
