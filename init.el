@@ -111,8 +111,8 @@ locate PACKAGE."
   (push 'browse-kill-ring-mode page-break-lines-modes))
 
 (require-package 'undo-tree)
-(diminish 'undo-tree-mode)
 (global-undo-tree-mode t)
+(diminish 'undo-tree-mode)
 
 
 ;;----------------------------------------------------------------------------
@@ -158,6 +158,12 @@ locate PACKAGE."
 
 
 ;;----------------------------------------------------------------------------
+;; Git
+;;----------------------------------------------------------------------------
+(require-package 'magit)
+
+
+;;----------------------------------------------------------------------------
 ;; Syntax utilities
 ;;----------------------------------------------------------------------------
 (when (maybe-require-package 'flycheck)
@@ -178,17 +184,207 @@ locate PACKAGE."
 (electric-pair-mode t)
 
 
-;;----------------------------------------------------------------------------
-;; Auto Completion
-;;----------------------------------------------------------------------------
+;;------------------------------------------------------------------------------
+;; helm
+;;------------------------------------------------------------------------------
+
 (require-package 'helm)
+
 (require 'helm-config)
 
+(autoload 'helm-c-yas-complete "helm-c-yasnippet" nil t)
+(global-set-key (kbd "C-x C-o") 'ffap)
 
-;;----------------------------------------------------------------------------
-;; Git
-;;----------------------------------------------------------------------------
-(require-package 'magit)
+(require-package 'helm-ls-git)
+
+(autoload 'helm-ls-git-ls "helm-ls-git" nil t)
+(autoload 'helm-browse-project "helm-ls-git" nil t)
+
+(require-package 'helm-gtags)
+
+(eval-after-load 'helm-gtags
+  '(progn
+     (setq helm-gtags-ignore-case t
+	   helm-gtags-auto-update t
+	   helm-gtags-use-input-at-cursor t
+	   helm-gtags-pulse-at-cursor t
+	   helm-gtags-prefix-key "\C-cg"
+	   helm-gtags-suggested-key-mapping t)
+
+     (define-key helm-gtags-mode-map (kbd "C-c g a") 'helm-gtags-tags-in-this-function)
+     (define-key helm-gtags-mode-map (kbd "C-j") 'helm-gtags-select)
+     (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
+     (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
+     (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+     (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)))
+
+(add-hook 'c-mode-common-hook
+	  (lambda ()
+	    (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
+	      (helm-gtags-mode 1))))
+(add-hook 'eshell-mode-hook 'helm-gtags-mode)
+(add-hook 'dired-mode-hook 'helm-gtags-mode)
+
+
+;;------------------------------------------------------------------------------
+;; company
+;;------------------------------------------------------------------------------
+
+(require-package 'company)
+(require-package 'company-statistics)
+(require-package 'company-c-headers)
+
+(add-hook 'prog-mode-hook 'global-company-mode)
+
+(if (fboundp 'evil-declare-change-repeat)
+    (mapc #'evil-declare-change-repeat
+          '(company-complete-common
+            company-select-next
+            company-select-previous
+            company-complete-selection
+            company-complete-number)))
+
+(eval-after-load 'company
+  '(progn
+     (require 'company-statistics)
+     (company-statistics-mode)
+
+     (add-to-list 'company-backends 'company-cmake)
+     (add-to-list 'company-backends 'company-c-headers)
+     (setq company-backends (delete 'company-semantic company-backends))))
+
+
+;;------------------------------------------------------------------------------
+;; yasnippet
+;;------------------------------------------------------------------------------
+
+(require-package 'yasnippet)
+(require-package 'dropdown-list)
+
+;; loading yasnippet will slow the startup
+;; but it's necessary cost
+(require 'yasnippet)
+
+(yas-reload-all)
+
+(yas-minor-mode 1)
+
+(autoload 'snippet-mode "yasnippet" "")
+
+
+;;------------------------------------------------------------------------------
+;; gtags
+;;------------------------------------------------------------------------------
+
+(require-package 'ggtags)
+
+(eval-after-load 'ggtags
+  '(progn
+     (define-key ggtags-mode-map (kbd "C-c g s") 'ggtags-find-other-symbol)
+     (define-key ggtags-mode-map (kbd "C-c g h") 'ggtags-view-tag-history)
+     (define-key ggtags-mode-map (kbd "C-c g r") 'ggtags-find-reference)
+     (define-key ggtags-mode-map (kbd "C-c g f") 'ggtags-find-file)
+     (define-key ggtags-mode-map (kbd "C-c g c") 'ggtags-create-tags)
+     (define-key ggtags-mode-map (kbd "C-c g u") 'ggtags-update-tags)
+
+     (define-key ggtags-mode-map (kbd "M-,") 'pop-tag-mark)))
+
+;; (add-hook 'c-mode-common-hook
+;; 	  (lambda ()
+;; 	    (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
+;; 	      (ggtags-mode 1))))
+;; (add-hook 'eshell-mode-hook 'ggtags-mode)
+;; (add-hook 'dired-mode-hook 'ggtags-mode)
+
+
+;;------------------------------------------------------------------------------
+;; hs-minor
+;;------------------------------------------------------------------------------
+(add-hook 'c-mode-common-hook 'hs-minor-mode)
+
+
+;;------------------------------------------------------------------------------
+;; doxygen
+;;------------------------------------------------------------------------------
+(autoload 'doxygen-insert-function-comment
+  "doxygen" "insert comment for the function at point" t)
+(autoload 'doxygen-insert-file-comment
+  "doxygen" "insert comment for file" t)
+(autoload 'doxygen-insert-member-group-region
+  "doxygen" "insert comment for member group" t)
+(autoload 'doxygen-insert-compound-comment
+  "doxygen" "insert comment for compound" t)
+
+
+;;------------------------------------------------------------------------------
+;; C & C++
+;;------------------------------------------------------------------------------
+
+(require-package 'cmake-mode)
+(add-hook 'cmake-mode-hook 'global-company-mode)
+
+(when (maybe-require-package 'c-eldoc)
+  (package-install 'c-eldoc))
+
+(defun my-c-mode-setup ()
+  (setq c-basic-offset 4
+        indent-tabs-mode nil
+        tab-width 4
+        c-tab-always-indent t)
+
+  ;; emacs-c-opening-corresponding-header-file
+  (local-set-key (kbd "C-x C-o") 'ff-find-other-file)
+  (setq cc-search-directories '("."
+                                "/usr/include"
+                                "/usr/local/include/*"
+                                "../*/include"))
+
+  ;; make a #define be left-aligned
+  (setq c-electric-pound-behavior (quote (alignleft)))
+
+  (autoload 'c-turn-on-eldoc-mode "c-eldoc" "" t)
+
+  (when buffer-file-name
+    (c-turn-on-eldoc-mode)
+
+    (if (executable-find "cmake")
+        (if (not (or (string-match "^/usr/local/include/.*" buffer-file-name)
+                     (string-match "^/usr/src/linux/include/.*" buffer-file-name)))
+            (cppcm-reload-all)))))
+
+(add-hook 'c-mode-hook
+          (lambda ()
+            (c-set-style "K&R")
+	    (my-c-mode-setup)))
+
+(add-hook 'c++-mode-hook
+          (lambda ()
+            (c-set-style "Stroustrup")
+	    (my-c-mode-setup)))
+
+
+;;------------------------------------------------------------------------------
+;; GDB & GUD
+;;------------------------------------------------------------------------------
+
+;; use gdb-many-windows by default
+(setq gdb-many-windows t)
+;; Non-nil means display source file containing the main routine
+;; at startup
+(setq gdb-show-main t)
+
+(global-set-key "\C-x\C-a\C-g" 'gud-run)
+
+
+;;------------------------------------------------------------------------------
+;; sr-speedbar
+;;------------------------------------------------------------------------------
+(require-package 'sr-speedbar)
+
+(setq sr-speedbar-auto-refresh nil)
+;; (setq speedbar-show-unknown-files t) ; show all files
+;; (setq speedbar-use-images nil) ; use text for buttons
+(setq sr-speedbar-right-side nil) ; put on left side
 
 
 ;;----------------------------------------------------------------------------
