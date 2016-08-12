@@ -319,7 +319,6 @@ locate PACKAGE."
 ;;------------------------------------------------------------------------------
 ;; C & C++
 ;;------------------------------------------------------------------------------
-
 (require-package 'cmake-mode)
 (add-hook 'cmake-mode-hook 'global-company-mode)
 
@@ -366,7 +365,6 @@ locate PACKAGE."
 ;;------------------------------------------------------------------------------
 ;; GDB & GUD
 ;;------------------------------------------------------------------------------
-
 ;; use gdb-many-windows by default
 (setq gdb-many-windows t)
 ;; Non-nil means display source file containing the main routine
@@ -374,6 +372,71 @@ locate PACKAGE."
 (setq gdb-show-main t)
 
 (global-set-key "\C-x\C-a\C-g" 'gud-run)
+
+
+;;------------------------------------------------------------------------------
+;; Lisp
+;;------------------------------------------------------------------------------
+(add-hook 'lisp-mode-hook (lambda () (setq indent-tabs-mode t)))
+(add-hook 'emacs-lisp-mode-hook (lambda () (setq indent-tabs-mode t)))
+(add-hook 'scheme-mode-hook (lambda () (setq indent-tabs-mode t)))
+
+(setq common-lisp-hyperspec-root (expand-file-name "~/Documents/HyperSpec/"))
+;; To use C-h S in Lisp mode to look up the symbol at point
+;; in the spec.
+(require 'info-look)
+(info-lookup-add-help :mode 'lisp-mode
+		      :regexp "[^][()'\" \t\n]+"
+		      :ignore-case t
+		      :doc-spec '(("(ansicl)Symbol Index"
+				   nil nil nil)))
+
+
+;;------------------------------------------------------------------------------
+;; Paredit
+;;------------------------------------------------------------------------------
+(require-package 'paredit)
+
+(with-eval-after-load 'paredit
+  (diminish 'paredit-mode " Par"))
+
+(require-package 'paredit-everywhere)
+
+
+;;------------------------------------------------------------------------------
+;; slime
+;;------------------------------------------------------------------------------
+(require-package 'slime)
+(mapc #'(lambda (top-dir)
+	  (let* ((file-name (concat top-dir
+				    "quicklisp/slime-helper.el")))
+	    (when (file-exists-p file-name)
+	      (load file-name))))
+      (list "/opt/" "~/"))
+(setq inferior-lisp-program (or (executable-find "sbcl")
+				(executable-find "/usr/bin/sbcl")
+				(executable-find "/usr/local/bin/sbcl")
+				"sbcl"))
+(require 'slime-autoloads)
+;; (slime-setup)
+(slime-setup '(slime-fancy))
+
+
+;;------------------------------------------------------------------------------
+;; geiser
+;;------------------------------------------------------------------------------
+(require-package 'geiser)
+(setq geiser-active-implementations '(guile))
+(setq geiser-guile-binary (or (executable-find "guile")
+                              (executable-find "/usr/bin/guile")
+                              (executable-find "/usr/local/bin/guile")
+                              "guile"))
+
+
+;;------------------------------------------------------------------------------
+;; Perl
+;;------------------------------------------------------------------------------
+(defalias 'perl-mode 'cperl-mode)
 
 
 ;;------------------------------------------------------------------------------
