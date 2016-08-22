@@ -146,8 +146,8 @@ locate PACKAGE."
 
 (require-package 'color-theme-sanityinc-solarized)
 
-(setq tool-bar-mode nil)
-(setq scroll-bar-mode nil)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
 (setq use-dialog-box nil)
 (setq use-file-dialog nil)
 
