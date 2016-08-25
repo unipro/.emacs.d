@@ -150,6 +150,7 @@ locate PACKAGE."
 (scroll-bar-mode -1)
 (setq use-dialog-box nil)
 (setq use-file-dialog nil)
+(show-paren-mode 1)
 
 (global-set-key (kbd "M-i") 'imenu)
 
@@ -437,6 +438,20 @@ locate PACKAGE."
 ;; Perl
 ;;------------------------------------------------------------------------------
 (defalias 'perl-mode 'cperl-mode)
+
+
+;;------------------------------------------------------------------------------
+;; Lua
+;;------------------------------------------------------------------------------
+(require-package 'lua-mode)
+
+
+;;------------------------------------------------------------------------------
+;; Markdown
+;;------------------------------------------------------------------------------
+(when (maybe-require-package 'markdown-mode)
+  (with-eval-after-load 'whitespace-cleanup-mode
+    (push 'markdown-mode whitespace-cleanup-mode-ignore-modes)))
 
 
 ;;------------------------------------------------------------------------------
