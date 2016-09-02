@@ -69,9 +69,10 @@ locate PACKAGE."
 ;;----------------------------------------------------------------------------
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
-(setq recentf-mode t)
+(recentf-mode 1)
 (setq recentf-max-saved-items 1000)
 (setq recentf-exclude '("/tmp/" "/ssh:"))
+(global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
 (defun sudo ()
   "Use TRAMP to `sudo' the current buffer"
