@@ -69,9 +69,10 @@ locate PACKAGE."
 ;;----------------------------------------------------------------------------
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
-(setq recentf-mode t)
+(recentf-mode 1)
 (setq recentf-max-saved-items 1000)
 (setq recentf-exclude '("/tmp/" "/ssh:"))
+(global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
 (defun sudo ()
   "Use TRAMP to `sudo' the current buffer"
@@ -146,10 +147,11 @@ locate PACKAGE."
 
 (require-package 'color-theme-sanityinc-solarized)
 
-(setq tool-bar-mode nil)
-(setq scroll-bar-mode nil)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
 (setq use-dialog-box nil)
 (setq use-file-dialog nil)
+(show-paren-mode 1)
 
 (global-set-key (kbd "M-i") 'imenu)
 
@@ -437,6 +439,20 @@ locate PACKAGE."
 ;; Perl
 ;;------------------------------------------------------------------------------
 (defalias 'perl-mode 'cperl-mode)
+
+
+;;------------------------------------------------------------------------------
+;; Lua
+;;------------------------------------------------------------------------------
+(require-package 'lua-mode)
+
+
+;;------------------------------------------------------------------------------
+;; Markdown
+;;------------------------------------------------------------------------------
+(when (maybe-require-package 'markdown-mode)
+  (with-eval-after-load 'whitespace-cleanup-mode
+    (push 'markdown-mode whitespace-cleanup-mode-ignore-modes)))
 
 
 ;;------------------------------------------------------------------------------
