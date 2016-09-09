@@ -6,4 +6,4 @@ This is my emacs settings.
 
 To install, clone this repo to `~/.emacs.d`  
 
-    git clone --recursive git@github.com:unipro/.emacs.d.git
+    git clone https://github.com:unipro/.emacs.d.git ~/.emacs.d
