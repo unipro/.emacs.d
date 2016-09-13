@@ -20,9 +20,9 @@
 (require 'package)
 
 (add-to-list 'package-archives
-	     '("marmalade" . "http://marmalade-repo.org/packages/"))
+             '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives
-	     '("melpa" . "https://melpa.org/packages/"))
+             '("melpa" . "https://melpa.org/packages/"))
 
 (setq package-enable-at-startup nil)
 (package-initialize)
@@ -80,7 +80,7 @@ locate PACKAGE."
   (when buffer-file-name
     (find-alternate-file
      (concat "/sudo:root@localhost:"
-	     buffer-file-name))))
+             buffer-file-name))))
 (setq tramp-default-method "ssh")
 
 (with-eval-after-load 'dired
@@ -142,7 +142,7 @@ locate PACKAGE."
            (set-frame-font "DejaVu Sans Mono")
            (set-face-font 'default "DejaVu Sans Mono")))
     (when (or (member "나눔고딕코딩" (font-family-list))
-	      (member "NanumGothicCoding" (font-family-list))) 
+              (member "NanumGothicCoding" (font-family-list))) 
       (set-fontset-font fontset 'hangul
                         '("NanumGothicCoding" . "unicode-bmp")))))
 
@@ -174,10 +174,10 @@ locate PACKAGE."
 
   ;; Override default flycheck triggers
   (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled)
-	flycheck-idle-change-delay 0.8)
+        flycheck-idle-change-delay 0.8)
 
   (setq flycheck-display-errors-function
-	#'flycheck-display-error-messages-unless-error-list))
+        #'flycheck-display-error-messages-unless-error-list))
 
 (require-package 'whitespace-cleanup-mode)
 (global-whitespace-cleanup-mode t)
@@ -208,11 +208,11 @@ locate PACKAGE."
 (eval-after-load 'helm-gtags
   '(progn
      (setq helm-gtags-ignore-case t
-	   helm-gtags-auto-update t
-	   helm-gtags-use-input-at-cursor t
-	   helm-gtags-pulse-at-cursor t
-	   helm-gtags-prefix-key "\C-cg"
-	   helm-gtags-suggested-key-mapping t)
+           helm-gtags-auto-update t
+           helm-gtags-use-input-at-cursor t
+           helm-gtags-pulse-at-cursor t
+           helm-gtags-prefix-key "\C-cg"
+           helm-gtags-suggested-key-mapping t)
 
      (define-key helm-gtags-mode-map (kbd "C-c g a") 'helm-gtags-tags-in-this-function)
      (define-key helm-gtags-mode-map (kbd "C-j") 'helm-gtags-select)
@@ -222,9 +222,9 @@ locate PACKAGE."
      (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)))
 
 (add-hook 'c-mode-common-hook
-	  (lambda ()
-	    (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
-	      (helm-gtags-mode 1))))
+          (lambda ()
+            (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
+              (helm-gtags-mode 1))))
 (add-hook 'eshell-mode-hook 'helm-gtags-mode)
 (add-hook 'dired-mode-hook 'helm-gtags-mode)
 
@@ -293,9 +293,9 @@ locate PACKAGE."
      (define-key ggtags-mode-map (kbd "M-,") 'pop-tag-mark)))
 
 ;; (add-hook 'c-mode-common-hook
-;; 	  (lambda ()
-;; 	    (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
-;; 	      (ggtags-mode 1))))
+;;           (lambda ()
+;;             (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
+;;               (ggtags-mode 1))))
 ;; (add-hook 'eshell-mode-hook 'ggtags-mode)
 ;; (add-hook 'dired-mode-hook 'ggtags-mode)
 
@@ -357,12 +357,12 @@ locate PACKAGE."
 (add-hook 'c-mode-hook
           (lambda ()
             (c-set-style "K&R")
-	    (my-c-mode-setup)))
+            (my-c-mode-setup)))
 
 (add-hook 'c++-mode-hook
           (lambda ()
             (c-set-style "Stroustrup")
-	    (my-c-mode-setup)))
+            (my-c-mode-setup)))
 
 
 ;;------------------------------------------------------------------------------
@@ -380,19 +380,19 @@ locate PACKAGE."
 ;;------------------------------------------------------------------------------
 ;; Lisp
 ;;------------------------------------------------------------------------------
-(add-hook 'lisp-mode-hook (lambda () (setq indent-tabs-mode t)))
-(add-hook 'emacs-lisp-mode-hook (lambda () (setq indent-tabs-mode t)))
-(add-hook 'scheme-mode-hook (lambda () (setq indent-tabs-mode t)))
+(add-hook 'lisp-mode-hook (lambda () (setq indent-tabs-mode nil)))
+(add-hook 'emacs-lisp-mode-hook (lambda () (setq indent-tabs-mode nil)))
+(add-hook 'scheme-mode-hook (lambda () (setq indent-tabs-mode nil)))
 
 (setq common-lisp-hyperspec-root (expand-file-name "~/Documents/HyperSpec/"))
 ;; To use C-h S in Lisp mode to look up the symbol at point
 ;; in the spec.
 (require 'info-look)
 (info-lookup-add-help :mode 'lisp-mode
-		      :regexp "[^][()'\" \t\n]+"
-		      :ignore-case t
-		      :doc-spec '(("(ansicl)Symbol Index"
-				   nil nil nil)))
+                      :regexp "[^][()'\" \t\n]+"
+                      :ignore-case t
+                      :doc-spec '(("(ansicl)Symbol Index"
+                                   nil nil nil)))
 
 
 ;;------------------------------------------------------------------------------
@@ -411,15 +411,15 @@ locate PACKAGE."
 ;;------------------------------------------------------------------------------
 (require-package 'slime)
 (mapc #'(lambda (top-dir)
-	  (let* ((file-name (concat top-dir
-				    "quicklisp/slime-helper.el")))
-	    (when (file-exists-p file-name)
-	      (load file-name))))
+          (let* ((file-name (concat top-dir
+                                    "quicklisp/slime-helper.el")))
+            (when (file-exists-p file-name)
+              (load file-name))))
       (list "/opt/" "~/"))
 (setq inferior-lisp-program (or (executable-find "sbcl")
-				(executable-find "/usr/bin/sbcl")
-				(executable-find "/usr/local/bin/sbcl")
-				"sbcl"))
+                                (executable-find "/usr/bin/sbcl")
+                                (executable-find "/usr/local/bin/sbcl")
+                                "sbcl"))
 (require 'slime-autoloads)
 ;; (slime-setup)
 (slime-setup '(slime-fancy))
