@@ -122,6 +122,7 @@ locate PACKAGE."
 (when window-system
   (setq coding-system-for-read 'utf-8))
 
+(set-language-environment "Korean")
 (setq default-input-method "korean-hangul")
 
 
