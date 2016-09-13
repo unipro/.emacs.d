@@ -141,7 +141,8 @@ locate PACKAGE."
           ((member "DejaVu Sans Mono" (font-family-list))
            (set-frame-font "DejaVu Sans Mono")
            (set-face-font 'default "DejaVu Sans Mono")))
-    (when (member "나눔고딕코딩" (font-family-list))
+    (when (or (member "나눔고딕코딩" (font-family-list))
+	      (member "NanumGothicCoding" (font-family-list))) 
       (set-fontset-font fontset 'hangul
                         '("NanumGothicCoding" . "unicode-bmp")))))
 
