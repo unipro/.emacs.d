@@ -459,7 +459,8 @@ locate PACKAGE."
 ;;------------------------------------------------------------------------------
 (require-package 'elpy)
 (elpy-enable)
-
+(elpy-use-ipython)
+(setq python-shell-interpreter-args "--simple-prompt -i")
 
 ;;------------------------------------------------------------------------------
 ;; Perl
