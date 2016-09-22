@@ -60,6 +60,9 @@ locate PACKAGE."
      (message "Couldn't install package `%s': %S" package err)
      nil)))
 
+;; ignore the signature checks
+;; (setq package-check-signature nil)
+
 
 ;;----------------------------------------------------------------------------
 ;; macOS key bindings
@@ -461,6 +464,9 @@ locate PACKAGE."
 (elpy-enable)
 (elpy-use-ipython)
 (setq python-shell-interpreter-args "--simple-prompt -i")
+
+(require-package 'ein)
+
 
 ;;------------------------------------------------------------------------------
 ;; Perl
