@@ -399,24 +399,6 @@ locate PACKAGE."
 
 
 ;;------------------------------------------------------------------------------
-;; Lisp
-;;------------------------------------------------------------------------------
-(add-hook 'lisp-mode-hook (lambda () (setq indent-tabs-mode nil)))
-(add-hook 'emacs-lisp-mode-hook (lambda () (setq indent-tabs-mode nil)))
-(add-hook 'scheme-mode-hook (lambda () (setq indent-tabs-mode nil)))
-
-(setq common-lisp-hyperspec-root (expand-file-name "~/Documents/HyperSpec/"))
-;; To use C-h S in Lisp mode to look up the symbol at point
-;; in the spec.
-(require 'info-look)
-(info-lookup-add-help :mode 'lisp-mode
-                      :regexp "[^][()'\" \t\n]+"
-                      :ignore-case t
-                      :doc-spec '(("(ansicl)Symbol Index"
-                                   nil nil nil)))
-
-
-;;------------------------------------------------------------------------------
 ;; Paredit
 ;;------------------------------------------------------------------------------
 (require-package 'paredit)
@@ -428,8 +410,26 @@ locate PACKAGE."
 
 
 ;;------------------------------------------------------------------------------
-;; slime
+;; Emacs Lisp
 ;;------------------------------------------------------------------------------
+(add-hook 'emacs-lisp-mode-hook (lambda () (setq indent-tabs-mode nil)))
+
+
+;;------------------------------------------------------------------------------
+;; Common Lisp & SLIME
+;;------------------------------------------------------------------------------
+(add-hook 'lisp-mode-hook (lambda () (setq indent-tabs-mode nil)))
+
+(setq common-lisp-hyperspec-root (expand-file-name "~/Documents/HyperSpec/"))
+;; To use C-h S in Lisp mode to look up the symbol at point
+;; in the spec.
+(require 'info-look)
+(info-lookup-add-help :mode 'lisp-mode
+                      :regexp "[^][()'\" \t\n]+"
+                      :ignore-case t
+                      :doc-spec '(("(ansicl)Symbol Index"
+                                   nil nil nil)))
+
 (require-package 'slime)
 (mapc #'(lambda (top-dir)
           (let* ((file-name (concat top-dir
@@ -447,8 +447,10 @@ locate PACKAGE."
 
 
 ;;------------------------------------------------------------------------------
-;; geiser
+;; scheme & geiser
 ;;------------------------------------------------------------------------------
+(add-hook 'scheme-mode-hook (lambda () (setq indent-tabs-mode nil)))
+
 (require-package 'geiser)
 (setq geiser-active-implementations '(guile))
 (setq geiser-guile-binary (or (executable-find "guile")
