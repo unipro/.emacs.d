@@ -447,6 +447,24 @@ locate PACKAGE."
 
 
 ;;------------------------------------------------------------------------------
+;; Clojure & CIDER
+;;------------------------------------------------------------------------------
+(require-package 'clojure-mode)
+(require-package 'flycheck-clojure)
+(require-package 'cider)
+
+(with-eval-after-load 'clojure-mode
+  (add-hook 'clojure-mode-hook (lambda () (setq indent-tabs-mode nil)))
+  (add-hook 'clojure-mode-hook 'subword-mode)
+  (with-eval-after-load 'flycheck
+    (flycheck-clojure-setup)))
+
+(with-eval-after-load 'cider
+    (add-hook 'cider-mode-hook 'eldoc-mode)
+    (add-hook 'cider-repl-mode-hook 'subword-mode))
+
+
+;;------------------------------------------------------------------------------
 ;; scheme & geiser
 ;;------------------------------------------------------------------------------
 (add-hook 'scheme-mode-hook (lambda () (setq indent-tabs-mode nil)))
