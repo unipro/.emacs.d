@@ -7,15 +7,18 @@
  '(custom-safe-themes
    (quote
     ("4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" default)))
+ '(package-selected-packages
+   (quote
+    (cider flycheck-clojure clojure-mode whole-line-or-region whitespace-cleanup-mode undo-tree sr-speedbar slime paredit-everywhere markdown-mode magit lua-mode helm-ls-git helm-gtags ggtags geiser flycheck elpy ein dropdown-list diminish company-statistics company-c-headers color-theme-sanityinc-solarized cmake-mode c-eldoc browse-kill-ring)))
  '(safe-local-variable-values
    (quote
     ((eval c-set-offset
-	   (quote case-label)
-	   (quote +))
+           (quote case-label)
+           (quote +))
      (eval add-to-list
-	   (quote auto-mode-alist)
-	   (quote
-	    ("\\.h\\'" . c++-mode)))
+           (quote auto-mode-alist)
+           (quote
+            ("\\.h\\'" . c++-mode)))
      (c-set-style . "bsd")
      (no-byte-compile t)))))
 (custom-set-faces
