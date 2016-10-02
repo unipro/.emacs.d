@@ -13,7 +13,7 @@
 ;;----------------------------------------------------------------------------
 ;; Bootstrap config
 ;;----------------------------------------------------------------------------
-(setq custom-file (expand-file-name "init.ec" user-emacs-directory))
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (setq gc-cons-threshold (* 128 1024 1024))
 
 
