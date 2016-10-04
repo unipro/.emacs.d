@@ -21,44 +21,22 @@
 ;; Package manager settings
 ;;----------------------------------------------------------------------------
 (require 'package)
-
+(setq package-enable-at-startup nil)
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/"))
-
-(setq package-enable-at-startup nil)
 (package-initialize)
 
-;; On-demand installation of packages
+;; Bootstrap `use-package'
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
 
-(defun require-package (package &optional min-version no-refresh)
-  "Install given PACKAGE, optionally requiring MIN-VERSION.
-If NO-REFRESH is non-nil, the available package lists will not be
-re-downloaded in order to locate PACKAGE."
-  (if (package-installed-p package min-version)
-      t
-    (if (or (assoc package package-archive-contents) no-refresh)
-        (if (boundp 'package-selected-packages)
-            ;; Record this as a package the user installed explicitly
-            (package-install package nil)
-          (package-install package))
-      (progn
-        (package-refresh-contents)
-        (require-package package min-version t)))))
-
-
-(defun maybe-require-package (package &optional min-version no-refresh)
-  "Try to install PACKAGE, and return non-nil if successful.
-In the event of failure, return nil and print a warning message.
-Optionally require MIN-VERSION.  If NO-REFRESH is non-nil, the
-available package lists will not be re-downloaded in order to
-locate PACKAGE."
-  (condition-case err
-      (require-package package min-version no-refresh)
-    (error
-     (message "Couldn't install package `%s': %S" package err)
-     nil)))
+(eval-when-compile
+  (require 'use-package))
+(require 'diminish) ;; if you use :diminish
+(require 'bind-key) ;; if you use any :bind variant
 
 ;; ignore the signature checks
 ;; (setq package-check-signature nil)
@@ -73,20 +51,19 @@ locate PACKAGE."
 
 
 ;;----------------------------------------------------------------------------
-;; Load common packages
-;;----------------------------------------------------------------------------
-(require-package 'diminish)
-
-
-;;----------------------------------------------------------------------------
 ;; Buffers, Files, Directories
 ;;----------------------------------------------------------------------------
-(global-set-key (kbd "C-x C-b") 'ibuffer)
+(use-package ibuffer
+  :bind
+  (("C-x C-b" . ibuffer)))
 
-(recentf-mode 1)
-(setq recentf-max-saved-items 1000)
-(setq recentf-exclude '("/tmp/" "/ssh:"))
-(global-set-key "\C-x\ \C-r" 'recentf-open-files)
+(use-package recentf-mode
+  :bind
+  (("C-x C-r" . recentf-open-files))
+  :init
+  (recentf-mode 1)
+  (setq recentf-max-saved-items 1000)
+  (setq recentf-exclude '("/tmp/" "/ssh:")))
 
 (defun sudo ()
   "Use TRAMP to `sudo' the current buffer"
@@ -97,37 +74,57 @@ locate PACKAGE."
              buffer-file-name))))
 (setq tramp-default-method "ssh")
 
-(with-eval-after-load 'dired
-  (require 'dired-x)
-  (setq dired-omit-mode t)
-  (setq-default dired-omit-files-p t)
-  (setq dired-omit-files "^\\.?#\\|^\\.$\\|^\\.\\.$\\|^\\..+$"))
+(use-package dired
+  :config
+  (use-package dired-x
+    :init
+    (setq dired-omit-mode t)
+    (setq-default dired-omit-files-p t)
+    (setq dired-omit-files "^\\.?#\\|^\\.$\\|^\\.\\.$\\|^\\..+$")))
 
-(ido-mode t)
-(setq ido-everywhere t)
-(setq ido-enable-flex-matching t)
+(use-package ido-mode
+  :init
+  (ido-mode t)
+  (setq ido-everywhere t)
+  (setq ido-enable-flex-matching t))
 
 
 ;;----------------------------------------------------------------------------
 ;; Editing
 ;;----------------------------------------------------------------------------
-(require-package 'whole-line-or-region)
+(use-package whole-line-or-region)
 
-(global-set-key [remap dabbrev-expand] 'hippie-expand)
+(use-package hippie-expand
+  :bind
+  (([remap dabbrev-expand] . hippie-expand)) ; M-/
+  :init
+  (setq hippie-expand-try-functions-list
+        '(try-complete-file-name-partially
+          try-complete-file-name
+          try-expand-dabbrev
+          try-expand-dabbrev-all-buffers
+          try-expand-dabbrev-from-kill)))
 
-(require-package 'browse-kill-ring)
-(setq browse-kill-ring-separator "\f")
-(global-set-key (kbd "M-Y") 'browse-kill-ring)
-(with-eval-after-load 'browse-kill-ring
+(use-package browse-kill-ring
+  :bind
+  (("M-Y" . browse-kill-ring))
+  :init
+  (setq browse-kill-ring-separator "\f")
+  :config
   (define-key browse-kill-ring-mode-map (kbd "C-g") 'browse-kill-ring-quit)
   (define-key browse-kill-ring-mode-map (kbd "M-n") 'browse-kill-ring-forward)
   (define-key browse-kill-ring-mode-map (kbd "M-p") 'browse-kill-ring-previous))
-(with-eval-after-load 'page-break-lines
-  (push 'browse-kill-ring-mode page-break-lines-modes))
 
-(require-package 'undo-tree)
-(global-undo-tree-mode t)
-(diminish 'undo-tree-mode)
+(use-package page-break-lines
+  :diminish page-break-lines-mode
+  ;; :init
+  ;; (global-page-break-lines-mode)
+  )
+
+(use-package undo-tree
+  :diminish undo-tree-mode
+  :init
+  (global-undo-tree-mode t))
 
 
 ;;----------------------------------------------------------------------------
@@ -143,10 +140,28 @@ locate PACKAGE."
 ;;----------------------------------------------------------------------------
 ;; Windows, Frames, Fonts, Themes
 ;;----------------------------------------------------------------------------
-(windmove-default-keybindings)
-(setq shift-select-mode nil)
-(setq windmove-wrap-around t)
-(winner-mode t)
+(use-package windmove
+  :init
+  (windmove-default-keybindings)
+  (setq shift-select-mode nil)
+  (setq windmove-wrap-around t))
+
+(use-package winner
+  :init
+  (winner-mode t))
+
+(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(if (fboundp 'show-paren-mode) (show-paren-mode 1))
+(setq use-dialog-box nil)
+(setq use-file-dialog nil)
+
+(use-package imenu
+  :bind
+  (("M-i" . imenu)))
+
+(setq inhibit-startup-screen t)
+(setq inhibit-startup-echo-area-message "Byungwan Jun")
 
 (when (display-graphic-p)
   (let ((fontset "fontset-default"))
@@ -161,158 +176,153 @@ locate PACKAGE."
       (set-fontset-font fontset 'hangul
                         '("NanumGothicCoding" . "unicode-bmp")))))
 
-(require-package 'color-theme-sanityinc-solarized)
-
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-(setq use-dialog-box nil)
-(setq use-file-dialog nil)
-(show-paren-mode 1)
-
-(global-set-key (kbd "M-i") 'imenu)
-
-(setq inhibit-startup-screen t)
-(setq inhibit-startup-echo-area-message "Byungwan Jun")
+(use-package color-theme-sanityinc-solarized)
 
 
 ;;----------------------------------------------------------------------------
 ;; Git
 ;;----------------------------------------------------------------------------
-(require-package 'magit)
+(use-package magit
+  :bind ("C-c g" . magit-status))
 
 
 ;;----------------------------------------------------------------------------
 ;; Syntax utilities
 ;;----------------------------------------------------------------------------
-(when (maybe-require-package 'flycheck)
-  (add-hook 'after-init-hook 'global-flycheck-mode)
-
-  ;; Override default flycheck triggers
+(use-package flycheck
+  :commands flycheck-mode
+  :init
+  ;; (add-hook 'after-init-hook 'global-flycheck-mode)
+  (add-hook 'prog-mode-hook #'flycheck-mode)
+  :config
   (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled)
-        flycheck-idle-change-delay 0.8)
+        flycheck-idle-change-delay 5.0))
 
-  (setq flycheck-display-errors-function
-        #'flycheck-display-error-messages-unless-error-list))
+(use-package whitespace-cleanup-mode
+  :init
+  (global-whitespace-cleanup-mode t))
 
-(require-package 'whitespace-cleanup-mode)
-(global-whitespace-cleanup-mode t)
+(setq-default indicate-empty-lines t)
 
-(setq indicate-empty-lines t)
-
-(electric-pair-mode t)
+(use-package electric-pair
+  :init
+  (electric-pair-mode t))
 
 
 ;;------------------------------------------------------------------------------
 ;; helm
 ;;------------------------------------------------------------------------------
 
-(require-package 'helm)
+(use-package helm
+  :diminish helm-mode
+  :bind
+  (("C-c h" . helm-mini)
+   ("C-h a" . helm-apropos)
+   ("C-x C-b" . helm-buffers-list)
+   ;; ("C-x b" . helm-buffers-list)
+   ("M-y" . helm-show-kill-ring)
+   ("M-x" . helm-M-x)
+   ("C-x c o" . helm-occur)
+   ("C-x c s" . helm-swoop)
+   ("C-x c y" . helm-yas-complete)
+   ("C-x c Y" . helm-yas-create-snippet-on-region)
+   ("C-x c b" . my/helm-do-grep-book-notes)
+   ("C-x c SPC" . helm-all-mark-rings)
+   ("C-x C-o" . ffap))
+  :init
+  (use-package helm-config
+    :init
+    (autoload 'helm-c-yas-complete "helm-c-yasnippet" nil t))
+  (use-package helm-ls-git
+    :init
+    (autoload 'helm-ls-git-ls "helm-ls-git" nil t)
+    (autoload 'helm-browse-project "helm-ls-git" nil t))
+  (use-package helm-gtags
+    :config
+    (setq helm-gtags-ignore-case t
+          helm-gtags-auto-update t
+          helm-gtags-use-input-at-cursor t
+          helm-gtags-pulse-at-cursor t
+          helm-gtags-prefix-key "\C-cg"
+          helm-gtags-suggested-key-mapping t)
 
-(require 'helm-config)
+    (add-hook 'c-mode-common-hook
+              (lambda ()
+                (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
+                  (helm-gtags-mode 1))))
+    (add-hook 'eshell-mode-hook 'helm-gtags-mode)
+    (add-hook 'dired-mode-hook 'helm-gtags-mode)
 
-(autoload 'helm-c-yas-complete "helm-c-yasnippet" nil t)
-(global-set-key (kbd "C-x C-o") 'ffap)
+    (define-key helm-gtags-mode-map (kbd "C-c g a") 'helm-gtags-tags-in-this-function)
+    (define-key helm-gtags-mode-map (kbd "C-j") 'helm-gtags-select)
+    (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
+    (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
+    (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+    (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)))
 
-(require-package 'helm-ls-git)
-
-(autoload 'helm-ls-git-ls "helm-ls-git" nil t)
-(autoload 'helm-browse-project "helm-ls-git" nil t)
-
-(require-package 'helm-gtags)
-
-(eval-after-load 'helm-gtags
-  '(progn
-     (setq helm-gtags-ignore-case t
-           helm-gtags-auto-update t
-           helm-gtags-use-input-at-cursor t
-           helm-gtags-pulse-at-cursor t
-           helm-gtags-prefix-key "\C-cg"
-           helm-gtags-suggested-key-mapping t)
-
-     (define-key helm-gtags-mode-map (kbd "C-c g a") 'helm-gtags-tags-in-this-function)
-     (define-key helm-gtags-mode-map (kbd "C-j") 'helm-gtags-select)
-     (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
-     (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
-     (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
-     (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)))
-
-(add-hook 'c-mode-common-hook
-          (lambda ()
-            (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
-              (helm-gtags-mode 1))))
-(add-hook 'eshell-mode-hook 'helm-gtags-mode)
-(add-hook 'dired-mode-hook 'helm-gtags-mode)
 
 
 ;;------------------------------------------------------------------------------
 ;; company
 ;;------------------------------------------------------------------------------
+(use-package company
+  :diminish company-mode
+  :init
+  (if (fboundp 'evil-declare-change-repeat)
+      (mapc #'evil-declare-change-repeat
+            '(company-complete-common
+              company-select-next
+              company-select-previous
+              company-complete-selection
+              company-complete-number)))
+  :config
+  (add-hook 'prog-mode-hook 'company-mode)
+  (use-package company-statistics
+    :init
+    (company-statistics-mode))
+  (dolist ((package '(company-cmake
+                      company-c-headers)))
+    (use-package package
+      :init
+      (add-to-list 'company-backends package)))
+  (setq company-backends (delete 'company-semantic company-backends))
 
-(require-package 'company)
-(require-package 'company-statistics)
-(require-package 'company-c-headers)
-
-(add-hook 'prog-mode-hook 'global-company-mode)
-
-(if (fboundp 'evil-declare-change-repeat)
-    (mapc #'evil-declare-change-repeat
-          '(company-complete-common
-            company-select-next
-            company-select-previous
-            company-complete-selection
-            company-complete-number)))
-
-(eval-after-load 'company
-  '(progn
-     (require 'company-statistics)
-     (company-statistics-mode)
-
-     (add-to-list 'company-backends 'company-cmake)
-     (add-to-list 'company-backends 'company-c-headers)
-     (setq company-backends (delete 'company-semantic company-backends))))
+  ;; Use Helm to complete suggestions
+  (define-key company-mode-map (kbd "C-:") 'helm-company)
+  (define-key company-active-map (kbd "C-:") 'helm-company)
+  (define-key company-active-map (kbd "C-n") 'company-select-next)
+  (define-key company-active-map (kbd "C-p") 'company-select-previous))
 
 
 ;;------------------------------------------------------------------------------
 ;; yasnippet
 ;;------------------------------------------------------------------------------
-
-(require-package 'yasnippet)
-(require-package 'dropdown-list)
-
-;; loading yasnippet will slow the startup
-;; but it's necessary cost
-(require 'yasnippet)
-
-(yas-reload-all)
-
-(yas-minor-mode 1)
-
-(autoload 'snippet-mode "yasnippet" "")
+(use-package yasnippet
+  :init
+  (yas-global-mode 1))
 
 
 ;;------------------------------------------------------------------------------
 ;; gtags
 ;;------------------------------------------------------------------------------
 
-(require-package 'ggtags)
+(use-package ggtags
+  ;; :config
+  ;; (add-hook 'c-mode-common-hook
+  ;;           (lambda ()
+  ;;             (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
+  ;;               (ggtags-mode 1))))
+  ;; (add-hook 'eshell-mode-hook 'ggtags-mode)
+  ;; (add-hook 'dired-mode-hook 'ggtags-mode)
 
-(eval-after-load 'ggtags
-  '(progn
-     (define-key ggtags-mode-map (kbd "C-c g s") 'ggtags-find-other-symbol)
-     (define-key ggtags-mode-map (kbd "C-c g h") 'ggtags-view-tag-history)
-     (define-key ggtags-mode-map (kbd "C-c g r") 'ggtags-find-reference)
-     (define-key ggtags-mode-map (kbd "C-c g f") 'ggtags-find-file)
-     (define-key ggtags-mode-map (kbd "C-c g c") 'ggtags-create-tags)
-     (define-key ggtags-mode-map (kbd "C-c g u") 'ggtags-update-tags)
-
-     (define-key ggtags-mode-map (kbd "M-,") 'pop-tag-mark)))
-
-;; (add-hook 'c-mode-common-hook
-;;           (lambda ()
-;;             (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
-;;               (ggtags-mode 1))))
-;; (add-hook 'eshell-mode-hook 'ggtags-mode)
-;; (add-hook 'dired-mode-hook 'ggtags-mode)
+  ;; (define-key ggtags-mode-map (kbd "C-c g s") 'ggtags-find-other-symbol)
+  ;; (define-key ggtags-mode-map (kbd "C-c g h") 'ggtags-view-tag-history)
+  ;; (define-key ggtags-mode-map (kbd "C-c g r") 'ggtags-find-reference)
+  ;; (define-key ggtags-mode-map (kbd "C-c g f") 'ggtags-find-file)
+  ;; (define-key ggtags-mode-map (kbd "C-c g c") 'ggtags-create-tags)
+  ;; (define-key ggtags-mode-map (kbd "C-c g u") 'ggtags-update-tags)
+  ;; (define-key ggtags-mode-map (kbd "M-,") 'pop-tag-mark)
+  )
 
 
 ;;------------------------------------------------------------------------------
@@ -343,11 +353,11 @@ locate PACKAGE."
 ;;------------------------------------------------------------------------------
 ;; C & C++
 ;;------------------------------------------------------------------------------
-(require-package 'cmake-mode)
-(add-hook 'cmake-mode-hook 'global-company-mode)
+(use-package cmake-mode
+  :init
+  (add-hook 'cmake-mode-hook 'global-company-mode))
 
-(when (maybe-require-package 'c-eldoc)
-  (package-install 'c-eldoc))
+(use-package c-eldoc)
 
 (defun my-c-mode-setup ()
   (setq c-basic-offset 4
@@ -401,12 +411,12 @@ locate PACKAGE."
 ;;------------------------------------------------------------------------------
 ;; Paredit
 ;;------------------------------------------------------------------------------
-(require-package 'paredit)
-
-(with-eval-after-load 'paredit
-  (diminish 'paredit-mode " Par"))
-
-(require-package 'paredit-everywhere)
+(use-package paredit
+  :init
+  (use-package paredit-everywhere)
+  :config
+  (with-eval-after-load 'paredit
+    (diminish 'paredit-mode " Par")))
 
 
 ;;------------------------------------------------------------------------------
@@ -430,38 +440,43 @@ locate PACKAGE."
                       :doc-spec '(("(ansicl)Symbol Index"
                                    nil nil nil)))
 
-(require-package 'slime)
-(mapc #'(lambda (top-dir)
-          (let* ((file-name (concat top-dir
-                                    "quicklisp/slime-helper.el")))
-            (when (file-exists-p file-name)
-              (load file-name))))
-      (list "/opt/" "~/"))
-(setq inferior-lisp-program (or (executable-find "sbcl")
-                                (executable-find "/usr/bin/sbcl")
-                                (executable-find "/usr/local/bin/sbcl")
-                                "sbcl"))
-(require 'slime-autoloads)
-;; (slime-setup)
-(slime-setup '(slime-fancy))
+(use-package slime
+  :commands slime
+  :init
+  (setq inferior-lisp-program (or (executable-find "sbcl")
+                                  (executable-find "/usr/bin/sbcl")
+                                  (executable-find "/usr/local/bin/sbcl")
+                                  "sbcl"))
+  :config
+  (require 'slime-autoloads)
+  ;; (slime-setup)
+  (slime-setup '(slime-fancy))
+
+  (mapc #'(lambda (top-dir)
+            (let* ((file-name (concat top-dir
+                                      "quicklisp/slime-helper.el")))
+              (when (file-exists-p file-name)
+                (load file-name))))
+        (list "/opt/" "~/")))
 
 
 ;;------------------------------------------------------------------------------
 ;; Clojure & CIDER
 ;;------------------------------------------------------------------------------
-(require-package 'clojure-mode)
-(require-package 'flycheck-clojure)
-(require-package 'cider)
-
-(with-eval-after-load 'clojure-mode
+(use-package clojure-mode
+  :init
+  (use-package flycheck-clojure
+    :config
+    (flycheck-clojure-setup))
+  :config
   (add-hook 'clojure-mode-hook (lambda () (setq indent-tabs-mode nil)))
-  (add-hook 'clojure-mode-hook 'subword-mode)
-  (with-eval-after-load 'flycheck
-    (flycheck-clojure-setup)))
+  (add-hook 'clojure-mode-hook 'subword-mode))
 
-(with-eval-after-load 'cider
-    (add-hook 'cider-mode-hook 'eldoc-mode)
-    (add-hook 'cider-repl-mode-hook 'subword-mode))
+(use-package cider
+  :commands (cider cider-connect cider-jack-in)
+  :config
+  (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+  (add-hook 'cider-repl-mode-hook 'subword-mode))
 
 
 ;;------------------------------------------------------------------------------
@@ -469,23 +484,25 @@ locate PACKAGE."
 ;;------------------------------------------------------------------------------
 (add-hook 'scheme-mode-hook (lambda () (setq indent-tabs-mode nil)))
 
-(require-package 'geiser)
-(setq geiser-active-implementations '(guile))
-(setq geiser-guile-binary (or (executable-find "guile")
-                              (executable-find "/usr/bin/guile")
-                              (executable-find "/usr/local/bin/guile")
-                              "guile"))
+(use-package geiser
+  :init
+  (setq geiser-active-implementations '(guile))
+  (setq geiser-guile-binary (or (executable-find "guile")
+                                (executable-find "/usr/bin/guile")
+                                (executable-(format "message" format-args)ind "/usr/local/bin/guile")
+                                "guile")))
 
 
 ;;------------------------------------------------------------------------------
 ;; Python
 ;;------------------------------------------------------------------------------
-(require-package 'elpy)
-(elpy-enable)
-(elpy-use-ipython)
-(setq python-shell-interpreter-args "--simple-prompt -i")
+(use-package elpy
+  :init
+  (elpy-enable)
+  (elpy-use-ipython)
+  (setq python-shell-interpreter-args "--simple-prompt -i"))
 
-(require-package 'ein)
+(use-package ein)
 
 
 ;;------------------------------------------------------------------------------
@@ -497,26 +514,27 @@ locate PACKAGE."
 ;;------------------------------------------------------------------------------
 ;; Lua
 ;;------------------------------------------------------------------------------
-(require-package 'lua-mode)
+(use-package lua-mode)
 
 
 ;;------------------------------------------------------------------------------
 ;; Markdown
 ;;------------------------------------------------------------------------------
-(when (maybe-require-package 'markdown-mode)
-  (with-eval-after-load 'whitespace-cleanup-mode
-    (push 'markdown-mode whitespace-cleanup-mode-ignore-modes)))
+(use-package markdown-mode
+  :config
+  (push 'markdown-mode whitespace-cleanup-mode-ignore-modes))
 
 
 ;;------------------------------------------------------------------------------
 ;; sr-speedbar
 ;;------------------------------------------------------------------------------
-(require-package 'sr-speedbar)
-
-(setq sr-speedbar-auto-refresh nil)
-;; (setq speedbar-show-unknown-files t) ; show all files
-;; (setq speedbar-use-images nil) ; use text for buttons
-(setq sr-speedbar-right-side nil) ; put on left side
+(use-package sr-speedbar
+  :init
+  (setq sr-speedbar-auto-refresh nil)
+  ;; (setq speedbar-show-unknown-files t) ; show all files
+  ;; (setq speedbar-use-images nil) ; use text for buttons
+  (setq sr-speedbar-right-side nil) ; put on left side
+  )
 
 
 ;;----------------------------------------------------------------------------
