@@ -49,11 +49,16 @@
 ;;----------------------------------------------------------------------------
 (when *is-a-mac*
   (setq mac-command-modifier 'meta)
-  (setq mac-option-modifier 'none))
+  (setq mac-option-modifier 'none)
+  (use-package exec-path-from-shell
+    :ensure t
+    :config (progn
+	      (exec-path-from-shell-initialize)
+	      (exec-path-from-shell-copy-env "PATH"))))
 
 
 ;;----------------------------------------------------------------------------
-;; Locales
+;; Locale, environment
 ;;----------------------------------------------------------------------------
 (when window-system
   (setq coding-system-for-read 'utf-8))
