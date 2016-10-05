@@ -16,7 +16,6 @@
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-
 
 ;;----------------------------------------------------------------------------
 ;; Package manager settings
@@ -44,7 +43,6 @@
 ;; ignore the signature checks
 (setq package-check-signature nil)
 
-
 
 ;;----------------------------------------------------------------------------
 ;; macOS key bindings
@@ -52,8 +50,6 @@
 (when *is-a-mac*
   (setq mac-command-modifier 'meta)
   (setq mac-option-modifier 'none))
-
-
 
 
 ;;----------------------------------------------------------------------------
@@ -64,7 +60,6 @@
 
 (set-language-environment "Korean")
 (setq default-input-method "korean-hangul")
-
 
 
 ;;----------------------------------------------------------------------------
@@ -114,7 +109,6 @@
        (concat "/sudo:root@localhost:"
                buffer-file-name)))))
 
-
 
 ;;----------------------------------------------------------------------------
 ;; Editing
@@ -144,7 +138,6 @@
 
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
-
 
 ;;----------------------------------------------------------------------------
 ;; Tabs, spaces, lines and parenthesis
@@ -163,7 +156,6 @@
   :init
   (global-page-break-lines-mode))
 
-
 
 ;;----------------------------------------------------------------------------
 ;; Windows, Frames, Fonts, Themes
@@ -171,6 +163,7 @@
 (when (display-graphic-p)
   (menu-bar-mode -1)
   (tool-bar-mode -1)
+  (scroll-bar-mode -1)
   (setq use-dialog-box nil)
   (setq use-file-dialog nil))
 
@@ -207,7 +200,6 @@
 
 (use-package color-theme-sanityinc-solarized)
 
-
 
 ;;----------------------------------------------------------------------------
 ;; flycheck, flyspell, etc
@@ -227,7 +219,6 @@
   :config (setq ispell-program-name (executable-find "aspell")
                 ispell-extra-args '("--sug-mode=ultra")))
 
-
 
 ;;----------------------------------------------------------------------------
 ;; whitespace
@@ -238,7 +229,6 @@
   :diminish whitespace-cleanup-mode
   :init
   (global-whitespace-cleanup-mode))
-
 
 
 ;;------------------------------------------------------------------------------
@@ -275,8 +265,6 @@
 (use-package helm-descbinds
   :config (helm-descbinds-mode))
 
-
-
 
 ;;----------------------------------------------------------------------------
 ;; Git
@@ -291,7 +279,6 @@
      ("C-x C-d" . helm-browse-project)))
 
 (use-package helm-gitignore)
-
 
 
 ;;------------------------------------------------------------------------------
@@ -308,8 +295,6 @@
 (use-package helm-projectile
   :commands (helm-projectile)
   :config (helm-projectile-on))
-
-
 
 
 ;;------------------------------------------------------------------------------
@@ -339,7 +324,6 @@
   :commands (helm-company)
   :config (company-mode))
 
-
 
 ;;------------------------------------------------------------------------------
 ;; yasnippet
@@ -349,7 +333,6 @@
   :config
   (use-package java-snippets)
   (yas-minor-mode))
-
 
 
 ;;------------------------------------------------------------------------------
@@ -399,13 +382,11 @@
   ;; (define-key ggtags-mode-map (kbd "M-,") 'pop-tag-mark)
   )
 
-
 
 ;;------------------------------------------------------------------------------
 ;; hs-minor
 ;;------------------------------------------------------------------------------
 (add-hook 'c-mode-common-hook 'hs-minor-mode)
-
 
 
 ;;------------------------------------------------------------------------------
@@ -419,7 +400,6 @@
   "doxygen" "insert comment for member group" t)
 (autoload 'doxygen-insert-compound-comment
   "doxygen" "insert comment for compound" t)
-
 
 
 ;;------------------------------------------------------------------------------
@@ -461,7 +441,6 @@
             (lambda ()
               (c-set-style "Stroustrup"))))
 
-
 
 ;;------------------------------------------------------------------------------
 ;; GDB & GUD
@@ -474,7 +453,6 @@
 
 (global-set-key "\C-x\C-a\C-g" 'gud-run)
 
-
 
 ;;------------------------------------------------------------------------------
 ;; Paredit
@@ -484,13 +462,11 @@
   :init
   (use-package paredit-everywhere))
 
-
 
 ;;------------------------------------------------------------------------------
 ;; Emacs Lisp
 ;;------------------------------------------------------------------------------
 (add-hook 'emacs-lisp-mode-hook (lambda () (setq indent-tabs-mode nil)))
-
 
 
 ;;------------------------------------------------------------------------------
@@ -527,7 +503,6 @@
                 (load file-name))))
         (list "/opt/" "~/")))
 
-
 
 ;;------------------------------------------------------------------------------
 ;; Clojure & CIDER
@@ -547,7 +522,6 @@
   (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
   (add-hook 'cider-repl-mode-hook 'subword-mode))
 
-
 
 ;;------------------------------------------------------------------------------
 ;; scheme & geiser
@@ -562,7 +536,6 @@
                                 (executable-(format "message" format-args)ind "/usr/local/bin/guile")
                                 "guile")))
 
-
 
 ;;------------------------------------------------------------------------------
 ;; Python
@@ -575,7 +548,6 @@
 
 (use-package ein)
 
-
 
 ;;------------------------------------------------------------------------------
 ;; Perl
@@ -584,14 +556,11 @@
   :config
   (defalias 'perl-mode 'cperl-mode))
 
-
-
 
 ;;------------------------------------------------------------------------------
 ;; Lua
 ;;------------------------------------------------------------------------------
 (use-package lua-mode)
-
 
 
 ;;------------------------------------------------------------------------------
@@ -601,14 +570,12 @@
   :config
   (push 'markdown-mode whitespace-cleanup-mode-ignore-modes))
 
-
 
 ;;------------------------------------------------------------------------------
 ;; nginx
 ;;------------------------------------------------------------------------------
 (use-package nginx-mode
   :mode ("nginx.conf$" "/etc/nginx/.*"))
-
 
 
 ;;------------------------------------------------------------------------------
@@ -622,7 +589,6 @@
   (setq sr-speedbar-right-side nil) ; put on left side
   )
 
-
 
 ;;----------------------------------------------------------------------------
 ;; Allow access from emacsclient
@@ -631,15 +597,11 @@
 (unless (server-running-p)
   (server-start))
 
-
-
 ;;----------------------------------------------------------------------------
 ;; Variables configured via the interactive 'customize' interface
 ;;----------------------------------------------------------------------------
 (when (file-exists-p custom-file)
   (load custom-file))
 
-
-
 (provide 'init)
 ;;; init.el ends here
