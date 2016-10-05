@@ -188,7 +188,8 @@
       (set-fontset-font fontset 'hangul
                         '("NanumGothicCoding" . "unicode-bmp")))))
 
-(use-package color-theme-sanityinc-solarized)
+(use-package color-theme-sanityinc-solarized
+  :ensure t)
 
 
 ;;----------------------------------------------------------------------------
