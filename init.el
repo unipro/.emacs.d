@@ -22,8 +22,8 @@
 ;;----------------------------------------------------------------------------
 (require 'package)
 (setq package-enable-at-startup nil)
-(add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/"))
+;; (add-to-list 'package-archives
+;;              '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
@@ -113,13 +113,15 @@
 ;;----------------------------------------------------------------------------
 ;; Editing
 ;;----------------------------------------------------------------------------
-(use-package whole-line-or-region)
+(use-package whole-line-or-region
+  :ensure t)
 
 (use-package hippie-expand
   :bind
   (([remap dabbrev-expand] . hippie-expand)))
 
 (use-package browse-kill-ring
+  :ensure t
   :bind
   (("M-Y" . browse-kill-ring)
    :map browse-kill-ring-mode-map
@@ -132,6 +134,7 @@
 (setq undo-limit 100000)
 
 (use-package undo-tree
+  :ensure t
   :diminish undo-tree-mode
   :init
   (global-undo-tree-mode t))
@@ -181,9 +184,8 @@
   (winner-mode t))
 
 (use-package imenu
-  :commands imenu
   :bind
-  (("M-i" . imenu)))
+  ("M-i" . imenu))
 
 (when (display-graphic-p)
   (let ((fontset "fontset-default"))
@@ -205,10 +207,10 @@
 ;; flycheck, flyspell, etc
 ;;----------------------------------------------------------------------------
 (use-package flycheck
+  :ensure t
   :diminish flycheck-mode
   :commands flycheck-mode
-  :init
-  (global-flycheck-mode)
+  :init (global-flycheck-mode)
   :config
   (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled)
         flycheck-idle-change-delay 5.0))
@@ -226,6 +228,7 @@
 (use-package whitespace)
 
 (use-package whitespace-cleanup-mode
+  :ensure t
   :diminish whitespace-cleanup-mode
   :init
   (global-whitespace-cleanup-mode))
@@ -235,6 +238,7 @@
 ;; helm
 ;;------------------------------------------------------------------------------
 (use-package helm
+  :ensure t
   :diminish helm-mode
   :bind
   (("C-c h" . helm-mini)
@@ -263,6 +267,7 @@
         helm-ff-skip-boring-files t))
 
 (use-package helm-descbinds
+  :ensure t
   :config (helm-descbinds-mode))
 
 
@@ -270,21 +275,25 @@
 ;; Git
 ;;----------------------------------------------------------------------------
 (use-package magit
+  :ensure t
   :commands (magit-status projectile-vc)
   :bind ("C-c g" . magit-status))
 
 (use-package helm-ls-git
-    :bind
-    (("C-x d" . helm-ls-git-ls)
-     ("C-x C-d" . helm-browse-project)))
+  :ensure t
+  :bind
+  (("C-x d" . helm-ls-git-ls)
+   ("C-x C-d" . helm-browse-project)))
 
-(use-package helm-gitignore)
+(use-package helm-gitignore
+  :ensure t)
 
 
 ;;------------------------------------------------------------------------------
 ;; projectile
 ;;------------------------------------------------------------------------------
 (use-package projectile
+  :ensure t
   :diminish projectile-mode
   :config
   (setq projectile-enable-caching t
@@ -293,6 +302,7 @@
   (projectile-global-mode))
 
 (use-package helm-projectile
+  :ensure t
   :commands (helm-projectile)
   :config (helm-projectile-on))
 
@@ -301,10 +311,13 @@
 ;; company
 ;;------------------------------------------------------------------------------
 (use-package company
+  :ensure t
   :diminish company-mode
   :commands (company-complete company-mode)
   :bind
-  (("M-/" . company-complete))
+  (([remap dabbrev-expand] . company-complete)
+   :map prog-mode-map
+   ([tab] . company-indent-or-complete-common))
   :init
   (if (fboundp 'evil-declare-change-repeat)
       (mapc #'evil-declare-change-repeat
@@ -317,10 +330,12 @@
   (add-hook 'prog-mode-hook 'company-mode)
 
   (use-package company-statistics
+    :ensure t
     :init
     (company-statistics-mode)))
 
 (use-package helm-company
+  :ensure t
   :commands (helm-company)
   :config (company-mode))
 
@@ -329,6 +344,7 @@
 ;; yasnippet
 ;;------------------------------------------------------------------------------
 (use-package yasnippet
+  :ensure t
   :commands (yas-expand yas-insert-snippet)
   :config
   (use-package java-snippets)
@@ -339,30 +355,33 @@
 ;; gtags
 ;;------------------------------------------------------------------------------
 (use-package helm-gtags
-    :bind
-    (:map helm-gtags-mode-map
-          ("C-c g a" . helm-gtags-tags-in-this-function)
-          ("C-j" . helm-gtags-select)
-          ("M-." . helm-gtags-dwim)
-          ("M-," . helm-gtags-pop-stack)
-          ("C-c <" . helm-gtags-previous-history)
-          ("C-c >" . helm-gtags-next-history))
-    :config
-    (setq helm-gtags-ignore-case t
-          helm-gtags-auto-update t
-          helm-gtags-use-input-at-cursor t
-          helm-gtags-pulse-at-cursor t
-          helm-gtags-prefix-key "\C-cg"
-          helm-gtags-suggested-key-mapping t)
+  :ensure t
+  :bind
+  (:map helm-gtags-mode-map
+   ("C-c g a" . helm-gtags-tags-in-this-function)
+   ("C-j" . helm-gtags-select)
+   ("M-." . helm-gtags-dwim)
+   ("M-," . helm-gtags-pop-stack)
+   ("C-c <" . helm-gtags-previous-history)
+   ("C-c >" . helm-gtags-next-history))
 
-    (add-hook 'c-mode-common-hook
-              (lambda ()
-                (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
-                  (helm-gtags-mode 1))))
-    (add-hook 'eshell-mode-hook 'helm-gtags-mode)
-    (add-hook 'dired-mode-hook 'helm-gtags-mode))
+  :config
+  (setq helm-gtags-ignore-case t
+        helm-gtags-auto-update t
+        helm-gtags-use-input-at-cursor t
+        helm-gtags-pulse-at-cursor t
+        helm-gtags-prefix-key "\C-cg"
+        helm-gtags-suggested-key-mapping t)
+
+  (add-hook 'c-mode-common-hook
+            (lambda ()
+              (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
+                (helm-gtags-mode 1))))
+  (add-hook 'eshell-mode-hook 'helm-gtags-mode)
+  (add-hook 'dired-mode-hook 'helm-gtags-mode))
 
 (use-package ggtags
+  :ensure t
   :commands ggtags-mode
   :diminish ggtags-mode
   ;; :config
@@ -403,15 +422,22 @@
 
 
 ;;------------------------------------------------------------------------------
-;; cc-mode
+;; C/C++ and Java
 ;;------------------------------------------------------------------------------
 (use-package cc-mode
-  :config
-  (use-package company-c-headers)
+  :init
+  (use-package company-c-headers
+    :ensure t
+    ;; :config
+    ;; (add-to-list 'company-c-headers-path-system "/usr/include/c++/5/")
+    )
+
+  (add-to-list 'company-backends 'company-gtags)
   (add-to-list 'company-backends 'company-c-headers)
   (setq company-backends (delete 'company-semantic company-backends))
 
   (use-package c-eldoc
+    :ensure t
     ;; :init
     ;; (setq c-eldoc-includes "`pkg-config gtk+-2.0 --cflags` -I./ -I../ ")
     :config
@@ -424,22 +450,18 @@
                     indent-tabs-mode nil
                     tab-width 4
                     c-tab-always-indent t)
-              ;; emacs-c-opening-corresponding-header-file
-              (local-set-key (kbd "C-x C-o") 'ff-find-other-file)
-              (setq cc-search-directories '("."
-                                            "/usr/include"
-                                            "/usr/local/include/*"
-                                            "../*/include"))
-
-              ;; make a #define be left-aligned
-              (setq c-electric-pound-behavior 'alignleft)))
-
-  (add-hook 'c-mode-hook
-            (lambda () (c-set-style "K&R")))
-
-  (add-hook 'c++-mode-hook
-            (lambda ()
-              (c-set-style "Stroustrup"))))
+              (subword-mode t)
+              (when (derived-mode-p 'c-mode 'c++-mode)
+                ;; emacs-c-opening-corresponding-header-file
+                (local-set-key (kbd "C-x C-o") 'ff-find-other-file)
+                (setq cc-search-directories '("."
+                                              "/usr/include"
+                                              "/usr/local/include/*"
+                                              "../*/include"))
+                ;; make a #define be left-aligned
+                (setq c-electric-pound-behavior 'alignleft))))
+  (add-hook 'c-mode-hook (lambda () (c-set-style "K&R")))
+  (add-hook 'c++-mode-hook (lambda () (c-set-style "Stroustrup"))))
 
 
 ;;------------------------------------------------------------------------------
@@ -458,33 +480,36 @@
 ;; Paredit
 ;;------------------------------------------------------------------------------
 (use-package paredit
+  :ensure t
   :diminish paredit-mode
   :init
-  (use-package paredit-everywhere))
+  (use-package paredit-everywhere
+    :ensure t))
 
 
 ;;------------------------------------------------------------------------------
 ;; Emacs Lisp
 ;;------------------------------------------------------------------------------
-(add-hook 'emacs-lisp-mode-hook (lambda () (setq indent-tabs-mode nil)))
+(add-hook 'emacs-lisp-mode-hook (lambda ()
+                                  (setq indent-tabs-mode nil)
+                                  (turn-on-eldoc-mode)
+                                  (eldoc-add-command
+                                   'paredit-backward-delete
+                                   'paredit-close-round)
+                                  (paredit-mode t)))
+(add-hook 'lisp-interaction-mode-hook (lambda () (paredit-mode t)))
+(add-hook 'ielm-mode-hook (lambda () (paredit-mode t)))
 
 
 ;;------------------------------------------------------------------------------
 ;; Common Lisp & SLIME
 ;;------------------------------------------------------------------------------
-(add-hook 'lisp-mode-hook (lambda () (setq indent-tabs-mode nil)))
-
-(setq common-lisp-hyperspec-root (expand-file-name "~/Documents/HyperSpec/"))
-;; To use C-h S in Lisp mode to look up the symbol at point
-;; in the spec.
-(require 'info-look)
-(info-lookup-add-help :mode 'lisp-mode
-                      :regexp "[^][()'\" \t\n]+"
-                      :ignore-case t
-                      :doc-spec '(("(ansicl)Symbol Index"
-                                   nil nil nil)))
+(add-hook 'lisp-mode-hook (lambda ()
+                            (setq indent-tabs-mode nil)
+                            (paredit-mode t)))
 
 (use-package slime
+  :ensure t
   :commands slime
   :init
   (setq inferior-lisp-program (or (executable-find "sbcl")
@@ -501,39 +526,51 @@
                                       "quicklisp/slime-helper.el")))
               (when (file-exists-p file-name)
                 (load file-name))))
-        (list "/opt/" "~/")))
+        (list "/opt/" "~/"))
+  (add-hook 'slime-repl-mode-hook (lambda () (paredit-mode 1))))
 
 
 ;;------------------------------------------------------------------------------
 ;; Clojure & CIDER
 ;;------------------------------------------------------------------------------
 (use-package clojure-mode
+  :ensure t
   :init
   (use-package flycheck-clojure
+    :ensure t
     :config
     (flycheck-clojure-setup))
   :config
-  (add-hook 'clojure-mode-hook (lambda () (setq indent-tabs-mode nil)))
-  (add-hook 'clojure-mode-hook 'subword-mode))
+  (add-hook 'clojure-mode-hook (lambda ()
+                                 (setq indent-tabs-mode nil)
+                                 (paredit-mode t)
+                                 (subword-mode t))))
 
 (use-package cider
+  :ensure t
   :commands (cider cider-connect cider-jack-in)
   :config
-  (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-  (add-hook 'cider-repl-mode-hook 'subword-mode))
+  (add-hook 'cider-mode-hook (lambda ()
+                               (cider-turn-on-eldoc-mode t)))
+  (add-hook 'cider-repl-mode-hook (lambda ()
+                                    (paredit-mode t)
+                                    (subword-mode t))))
 
 
 ;;------------------------------------------------------------------------------
 ;; scheme & geiser
 ;;------------------------------------------------------------------------------
-(add-hook 'scheme-mode-hook (lambda () (setq indent-tabs-mode nil)))
+(add-hook 'scheme-mode-hook (lambda ()
+                              (setq indent-tabs-mode nil)
+                              (paredit-mode t)))
 
 (use-package geiser
+  :ensure t
   :init
   (setq geiser-active-implementations '(guile))
   (setq geiser-guile-binary (or (executable-find "guile")
                                 (executable-find "/usr/bin/guile")
-                                (executable-(format "message" format-args)ind "/usr/local/bin/guile")
+                                (executable-find "/usr/local/bin/guile")
                                 "guile")))
 
 
@@ -541,12 +578,14 @@
 ;; Python
 ;;------------------------------------------------------------------------------
 (use-package elpy
+  :ensure t
   :init
   (elpy-enable)
   (elpy-use-ipython)
   (setq python-shell-interpreter-args "--simple-prompt -i"))
 
-(use-package ein)
+(use-package ein
+  :ensure t)
 
 
 ;;------------------------------------------------------------------------------
@@ -560,13 +599,15 @@
 ;;------------------------------------------------------------------------------
 ;; Lua
 ;;------------------------------------------------------------------------------
-(use-package lua-mode)
+(use-package lua-mode
+  :ensure t)
 
 
 ;;------------------------------------------------------------------------------
 ;; Markdown
 ;;------------------------------------------------------------------------------
 (use-package markdown-mode
+  :ensure t
   :config
   (push 'markdown-mode whitespace-cleanup-mode-ignore-modes))
 
@@ -575,6 +616,7 @@
 ;; nginx
 ;;------------------------------------------------------------------------------
 (use-package nginx-mode
+  :ensure t
   :mode ("nginx.conf$" "/etc/nginx/.*"))
 
 
