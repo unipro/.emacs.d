@@ -194,7 +194,17 @@
                         '("NanumGothicCoding" . "unicode-bmp")))))
 
 (use-package color-theme-sanityinc-solarized
-  :ensure t)
+  :ensure t
+  :commands (color-theme-sanityinc-solarized-dark
+             color-theme-sanityinc-solarized-light)
+  :if (display-graphic-p)
+  :init (progn
+          (setq custom-enabled-themes '(sanityinc-solarized-light))
+          (setq custom-safe-themes
+                '("4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4"
+                  "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328"
+                  default))
+          (color-theme-sanityinc-solarized-light)))
 
 
 ;;----------------------------------------------------------------------------
@@ -273,10 +283,10 @@
   :commands (magit-status projectile-vc)
   :bind ("C-c g" . magit-status))
 
-(use-package helm-ls-git
-  :ensure t
-  :bind (("C-x d" . helm-ls-git-ls)
-         ("C-x C-d" . helm-browse-project)))
+;; (use-package helm-ls-git
+;;   :ensure t
+;;   :bind (("C-x d" . helm-ls-git-ls)
+;;          ("C-x C-d" . helm-browse-project)))
 
 (use-package helm-gitignore
   :ensure t)
@@ -598,6 +608,13 @@
           ;; (setq speedbar-show-unknown-files t)
           ;; (setq speedbar-use-images nil)
           (setq sr-speedbar-right-side nil)))
+
+
+
+;;----------------------------------------------------------------------------
+;; Miscellaneous
+;;----------------------------------------------------------------------------
+(setq enable-local-variables :safe)
 
 
 ;;----------------------------------------------------------------------------
