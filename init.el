@@ -53,8 +53,8 @@
   (use-package exec-path-from-shell
     :ensure t
     :config (progn
-	      (exec-path-from-shell-initialize)
-	      (exec-path-from-shell-copy-env "PATH"))))
+              (exec-path-from-shell-initialize)
+              (exec-path-from-shell-copy-env "PATH"))))
 
 
 ;;----------------------------------------------------------------------------
@@ -189,7 +189,7 @@
            (set-frame-font "DejaVu Sans Mono")
            (set-face-font 'default "DejaVu Sans Mono")))
     (when (or (member "나눔고딕코딩" (font-family-list))
-              (member "NanumGothicCoding" (font-family-list))) 
+              (member "NanumGothicCoding" (font-family-list)))
       (set-fontset-font fontset 'hangul
                         '("NanumGothicCoding" . "unicode-bmp")))))
 
@@ -290,6 +290,19 @@
 
 (use-package helm-gitignore
   :ensure t)
+
+
+;;----------------------------------------------------------------------------
+;; Subversion
+;;----------------------------------------------------------------------------
+(use-package psvn
+  :ensure t
+  :commands (svn-status svn-examine projectile-vc)
+  :bind ("C-c s" . svn-status)
+  :config (progn
+            (setq svn-status-hide-unmodified t)
+            (setq svn-status-hide-unknown t)
+            (setq svn-status-svn-file-coding-system 'utf-8)))
 
 
 ;;------------------------------------------------------------------------------
