@@ -460,7 +460,7 @@
                                                       "/usr/local/include/*"
                                                       "../*/include"))
                         ;; make a #define be left-aligned
-                        (setq c-electric-pound-behavior 'alignleft))))
+                        (setq c-electric-pound-behavior '(alignleft)))))
           (add-hook 'c-mode-hook (lambda () (c-set-style "K&R")))
           (add-hook 'c++-mode-hook (lambda () (c-set-style "Stroustrup")))))
 
