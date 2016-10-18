@@ -306,6 +306,18 @@
 
 
 ;;------------------------------------------------------------------------------
+;; org-mode
+;;------------------------------------------------------------------------------
+(use-package org
+  :init (setq org-log-done t
+              org-directory "~/Documents/Org"
+              org-mobile-directory "~/Dropbox/Apps/MobileOrg"
+              org-agenda-files `(,(concat org-directory "/tasks.org"))
+              org-mobile-inbox-for-pull (concat org-directory "/index.org"))
+  :config (add-hook 'org-mode-hook 'company-mode))
+
+
+;;------------------------------------------------------------------------------
 ;; projectile
 ;;------------------------------------------------------------------------------
 (use-package projectile
