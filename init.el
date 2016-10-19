@@ -491,13 +491,19 @@
 ;;------------------------------------------------------------------------------
 ;; GDB & GUD
 ;;------------------------------------------------------------------------------
-;; use gdb-many-windows by default
-(setq gdb-many-windows t)
-;; Non-nil means display source file containing the main routine
-;; at startup
-(setq gdb-show-main t)
+(use-package gdb-mi
+  :commands (gdb)
+  :init (progn
+          ;; use gdb-many-windows by default
+          (setq gdb-many-windows t)
+          ;; Non-nil means display source file containing the main
+          ;; routine at startup
+          (setq gdb-show-main t)))
 
-(global-set-key "\C-x\C-a\C-g" 'gud-run)
+(use-package gud
+  :commands (gdb)
+  :bind ("C-x C-a C-g" . gud-run)
+  :init (add-hook 'gud-mode-hook #'gud-tooltip-mode))
 
 
 ;;------------------------------------------------------------------------------
