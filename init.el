@@ -161,7 +161,8 @@
 (when (display-graphic-p)
   (menu-bar-mode -1)
   (tool-bar-mode -1)
-  (scroll-bar-mode -1)
+  ;; (scroll-bar-mode -1)
+  (set-scroll-bar-mode 'right)
   (setq use-dialog-box nil)
   (setq use-file-dialog nil))
 
@@ -657,7 +658,6 @@
 ;; Miscellaneous
 ;;----------------------------------------------------------------------------
 (setq enable-local-variables :safe)
-(global-unset-key (kbd "C-z"))
 
 
 ;;----------------------------------------------------------------------------
