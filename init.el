@@ -385,7 +385,20 @@
          ("\\.mpd$" . nxml-mode)
          ("\\.isml?$" . nxml-mode)
          ("\\.smil$" . nxml-mode))
-  :init (add-to-list 'magic-mode-alist '("<\\?xml " . nxml-mode)))
+  :init (add-to-list 'magic-mode-alist '("<\\?xml " . nxml-mode))
+  :config (progn
+            (defun nxml-pretty-print (begin end)
+              "Pretty-print selected region."
+              (interactive "r")
+              (save-excursion
+                (goto-char begin)
+                (while (search-forward-regexp "\>[ \\t]*\<" nil t)
+                  (backward-char) (insert "\n"))
+                (indent-region begin end)))
+            (defun nxml-pretty-print-buffer ()
+              "Pretty-print current region."
+              (interactive)
+              (nxml-pretty-print (point-min) (point-max)))))
 
 
 ;;------------------------------------------------------------------------------
@@ -636,7 +649,10 @@
   :config (setq-default js2-basic-offset 2))
 
 (use-package json-mode
-  :ensure t)
+  :ensure t
+  :config (add-hook 'json-mode-hook (lambda ()
+                                      (make-local-variable 'js-indent-level)
+                                      (setq js-indent-level 2))))
 
 
 ;;------------------------------------------------------------------------------
