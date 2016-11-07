@@ -498,7 +498,9 @@
                                                       "../*/include"))
                         ;; make a #define be left-aligned
                         (setq c-electric-pound-behavior '(alignleft)))))
-          (add-hook 'c-mode-hook (lambda () (c-set-style "K&R")))
+          (add-hook 'c-mode-hook (lambda ()
+                                   (c-set-style "K&R")
+                                   (setq c-basic-offset 4)))
           (add-hook 'c++-mode-hook (lambda () (c-set-style "Stroustrup")))))
 
 
