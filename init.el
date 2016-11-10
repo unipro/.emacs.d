@@ -565,12 +565,6 @@
   :config (progn
             (require 'slime-autoloads)
             (slime-setup '(slime-fancy))
-            (mapc #'(lambda (top-dir)
-                      (let* ((file-name (concat top-dir
-                                                "quicklisp/slime-helper.el")))
-                        (when (file-exists-p file-name)
-                          (load file-name))))
-                  (list "/opt/" "~/"))
             (add-hook 'slime-repl-mode-hook (lambda () (paredit-mode t)))))
 
 
