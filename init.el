@@ -507,6 +507,19 @@
 
 
 ;;------------------------------------------------------------------------------
+;; JDEE
+;;------------------------------------------------------------------------------
+(use-package jdee
+  :mode ("\\.java\\'" . jdee-mode)
+  :init (progn
+          (add-hook 'jdee-mode-hook (lambda ()  (c-set-style "java")))
+          (autoload 'jdee-mode "jdee" "jdee mode" t))
+  :config (progn
+            (setq jdee-server-dir (expand-file-name "java"
+                                                    user-emacs-directory))))
+
+
+;;------------------------------------------------------------------------------
 ;; GDB & GUD
 ;;------------------------------------------------------------------------------
 (use-package gdb-mi
