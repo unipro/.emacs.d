@@ -378,30 +378,6 @@
 
 
 ;;------------------------------------------------------------------------------
-;; nxml
-;;------------------------------------------------------------------------------
-(use-package nxml-mode
-  :mode (("\\.xml$" . nxml-mode)
-         ("\\.mpd$" . nxml-mode)
-         ("\\.isml?$" . nxml-mode)
-         ("\\.smil$" . nxml-mode))
-  :init (add-to-list 'magic-mode-alist '("<\\?xml " . nxml-mode))
-  :config (progn
-            (defun nxml-pretty-print (begin end)
-              "Pretty-print selected region."
-              (interactive "r")
-              (save-excursion
-                (goto-char begin)
-                (while (search-forward-regexp "\>[ \\t]*\<" nil t)
-                  (backward-char) (insert "\n"))
-                (indent-region begin end)))
-            (defun nxml-pretty-print-buffer ()
-              "Pretty-print current region."
-              (interactive)
-              (nxml-pretty-print (point-min) (point-max)))))
-
-
-;;------------------------------------------------------------------------------
 ;; gtags
 ;;------------------------------------------------------------------------------
 (use-package helm-gtags
@@ -664,6 +640,30 @@
   :config (add-hook 'json-mode-hook (lambda ()
                                       (make-local-variable 'js-indent-level)
                                       (setq js-indent-level 2))))
+
+
+;;------------------------------------------------------------------------------
+;; nxml
+;;------------------------------------------------------------------------------
+(use-package nxml-mode
+  :mode (("\\.xml$" . nxml-mode)
+         ("\\.mpd$" . nxml-mode)
+         ("\\.isml?$" . nxml-mode)
+         ("\\.smil$" . nxml-mode))
+  :init (add-to-list 'magic-mode-alist '("<\\?xml " . nxml-mode))
+  :config (progn
+            (defun nxml-pretty-print (begin end)
+              "Pretty-print selected region."
+              (interactive "r")
+              (save-excursion
+                (goto-char begin)
+                (while (search-forward-regexp "\>[ \\t]*\<" nil t)
+                  (backward-char) (insert "\n"))
+                (indent-region begin end)))
+            (defun nxml-pretty-print-buffer ()
+              "Pretty-print current region."
+              (interactive)
+              (nxml-pretty-print (point-min) (point-max)))))
 
 
 ;;------------------------------------------------------------------------------
