@@ -542,7 +542,8 @@
 ;;------------------------------------------------------------------------------
 (add-hook 'lisp-mode-hook (lambda ()
                             (setq indent-tabs-mode nil)
-                            (paredit-mode t)))
+                            (paredit-mode t)
+                            (helm-gtags-mode 1)))
 
 (use-package slime
   :ensure t
@@ -586,7 +587,8 @@
 ;;------------------------------------------------------------------------------
 (add-hook 'scheme-mode-hook (lambda ()
                               (setq indent-tabs-mode nil)
-                              (paredit-mode t)))
+                              (paredit-mode t)
+                              (helm-gtags-mode 1)))
 
 (use-package geiser
   :ensure t
@@ -601,6 +603,10 @@
 ;;------------------------------------------------------------------------------
 ;; Python
 ;;------------------------------------------------------------------------------
+(add-hook 'python-mode-hook (lambda ()
+                              (setq indent-tabs-mode nil)
+                              (helm-gtags-mode 1)))
+
 (use-package elpy
   :ensure t
   :init (progn
@@ -615,6 +621,8 @@
 ;;------------------------------------------------------------------------------
 ;; Perl
 ;;------------------------------------------------------------------------------
+(add-hook 'cperl-mode-hook (lambda () (helm-gtags-mode 1)))
+
 (use-package cperl-mode
   :config (defalias 'perl-mode 'cperl-mode))
 
@@ -622,6 +630,8 @@
 ;;------------------------------------------------------------------------------
 ;; Lua
 ;;------------------------------------------------------------------------------
+(add-hook 'lua-mode-hook (lambda () (helm-gtags-mode 1)))
+
 (use-package lua-mode
   :ensure t)
 
