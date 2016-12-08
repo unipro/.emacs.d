@@ -63,7 +63,8 @@
 (when window-system
   (setq coding-system-for-read 'utf-8))
 
-(set-language-environment "Korean")
+(set-language-environment "UTF-8")
+(set-default-coding-systems 'utf-8)
 (setq default-input-method "korean-hangul")
 
 
