@@ -60,11 +60,18 @@
 ;;----------------------------------------------------------------------------
 ;; Locale, environment
 ;;----------------------------------------------------------------------------
-(when window-system
-  (setq coding-system-for-read 'utf-8))
-
 (set-language-environment "UTF-8")
 (set-default-coding-systems 'utf-8)
+(cond (*is-a-mac*
+       (setq-default coding-system-for-read 'utf-8-hfs)
+       (set-file-name-coding-system 'utf-8-hfs))
+      (t
+       (setq-default coding-system-for-read 'utf-8)
+       (set-file-name-coding-system 'utf-8)))
+(set-selection-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8-unix)
+(set-terminal-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
 (setq default-input-method "korean-hangul")
 
 
@@ -190,7 +197,7 @@
           ((member "DejaVu Sans Mono" (font-family-list))
            (set-frame-font "DejaVu Sans Mono")
            (set-face-font 'default "DejaVu Sans Mono")))
-    (when (or (member "나눔고딕코딩" (font-family-list))
+    (when (or (member "나눔고딕코딩" (font-family-list))
               (member "NanumGothicCoding" (font-family-list)))
       (set-fontset-font fontset 'hangul
                         '("NanumGothicCoding" . "unicode-bmp")))))
