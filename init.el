@@ -48,8 +48,8 @@
 ;; macOS key bindings
 ;;----------------------------------------------------------------------------
 (when *is-a-mac*
-  (setq mac-command-modifier 'meta)
-  (setq mac-option-modifier 'none)
+  ;; (setq mac-command-modifier 'meta)
+  ;; (setq mac-option-modifier 'none)
   (use-package exec-path-from-shell
     :ensure t
     :config (progn
