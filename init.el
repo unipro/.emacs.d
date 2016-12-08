@@ -708,6 +708,12 @@
 ;; Miscellaneous
 ;;----------------------------------------------------------------------------
 (setq enable-local-variables :safe)
+(add-to-list 'safe-local-variable-values
+             '(eval add-to-list 'c-offsets-alist '(case-label . +)))
+(add-to-list 'safe-local-variable-values
+             '(eval (add-to-list 'c-offsets-alist '(case-label . +))))
+(add-to-list 'safe-local-variable-values '(nxml-child-indent . 4))
+(add-to-list 'safe-local-variable-values '(nxml-attribute-indent . 4))
 
 
 ;;----------------------------------------------------------------------------
