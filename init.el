@@ -73,6 +73,7 @@
 (set-terminal-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
 (setq default-input-method "korean-hangul")
+(global-set-key (kbd "S-SPC") 'toggle-input-method)
 
 
 ;;----------------------------------------------------------------------------
