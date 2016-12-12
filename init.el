@@ -86,38 +86,38 @@
 
 (use-package recentf
   :bind (("C-x C-r" . recentf-open-files))
-  :init (progn
-          (recentf-mode 1)
-          (setq recentf-max-saved-items 1000)
-          (setq recentf-exclude '("/tmp/" "/ssh:"))))
+  :init
+  (recentf-mode 1)
+  (setq recentf-max-saved-items 1000
+        recentf-exclude '("/tmp/" "/ssh:")))
 
 (use-package dired
-  :config (progn
-            (setq dired-dwim-target t
-                  dired-recursive-copies 'always
-                  dired-recursive-deletes 'top
-                  dired-listing-switches "-lahp")
-            (use-package dired-x
+  :config
+  (setq dired-dwim-target t
+        dired-recursive-copies 'always
+        dired-recursive-deletes 'top
+        dired-listing-switches "-lahp")
+  (use-package dired-x
               :config
               (setq dired-omit-mode t)
               (setq-default dired-omit-files-p t)
-              (setq dired-omit-files "^\\.?#\\|^\\.$\\|^\\.\\.$\\|^\\..+$"))))
+              (setq dired-omit-files "^\\.?#\\|^\\.$\\|^\\.\\.$\\|^\\..+$")))
 
 (use-package ido-mode
   :init (ido-mode t)
-  :config (progn
-            (setq ido-everywhere t)
-            (setq ido-enable-flex-matching t)))
+  :config
+  (setq ido-everywhere t)
+  (setq ido-enable-flex-matching t))
 
 (use-package tramp
-  :config (progn
-            (setq tramp-default-method "ssh")
-            (defun sudo ()
-              "Use TRAMP to `sudo' the current buffer"
-              (interactive)
-              (when buffer-file-name
-                (find-alternate-file (concat "/sudo:root@localhost:"
-                                             buffer-file-name))))))
+  :config
+  (setq tramp-default-method "ssh")
+  (defun sudo ()
+    "Use TRAMP to `sudo' the current buffer"
+    (interactive)
+    (when buffer-file-name
+      (find-alternate-file (concat "/sudo:root@localhost:"
+                                   buffer-file-name)))))
 
 
 ;;----------------------------------------------------------------------------
@@ -179,10 +179,10 @@
 (setq inhibit-startup-echo-area-message "Byungwan Jun")
 
 (use-package windmove
-  :init (progn
-          (windmove-default-keybindings)
-          (setq shift-select-mode nil)
-          (setq windmove-wrap-around t)))
+  :init
+  (windmove-default-keybindings)
+  (setq shift-select-mode nil
+        windmove-wrap-around t))
 
 (use-package winner
   :init (winner-mode t))
@@ -214,13 +214,13 @@
   :commands (color-theme-sanityinc-solarized-dark
              color-theme-sanityinc-solarized-light)
   :if (display-graphic-p)
-  :init (progn
-          (setq custom-enabled-themes '(sanityinc-solarized-light))
-          (setq custom-safe-themes
-                '("4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4"
-                  "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328"
-                  default))
-          (color-theme-sanityinc-solarized-light)))
+  :init
+  (setq custom-enabled-themes '(sanityinc-solarized-light))
+  (setq custom-safe-themes
+        '("4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4"
+          "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328"
+          default))
+  (color-theme-sanityinc-solarized-light))
 
 
 ;;----------------------------------------------------------------------------
@@ -231,16 +231,16 @@
   :diminish flycheck-mode
   :commands flycheck-mode
   :init (global-flycheck-mode)
-  :config (setq flycheck-check-syntax-automatically '(save
-                                                      idle-change
-                                                      mode-enabled)
-                flycheck-idle-change-delay 5.0))
+  :config
+  (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled)
+        flycheck-idle-change-delay 5.0))
 
 ;; flyspell - use aspell instead of ispell
 (use-package flyspell
   :commands (flyspell-mode flyspell-prog-mode)
-  :config (setq ispell-program-name (executable-find "aspell")
-                ispell-extra-args '("--sug-mode=ultra")))
+  :config
+  (setq ispell-program-name (executable-find "aspell")
+        ispell-extra-args '("--sug-mode=ultra")))
 
 
 ;;----------------------------------------------------------------------------
@@ -273,18 +273,18 @@
          ("C-x c b" . my/helm-do-grep-book-notes)
          ("C-x c SPC" . helm-all-mark-rings)
          ("C-x C-o" . ffap))
-  :init (progn
-          (require 'helm-config)
-          (setq helm-candidate-number-limit 100)
-          (setq helm-yas-display-key-on-candidate t)
-          ;; for pretty fast updates when hitting RET too quickly
-          ;; after typing fast:
-          (setq helm-idle-delay 0.0 ; update fast sources immediately (doesn't).
-                helm-input-idle-delay 0.01  ; this actually updates things
-                                            ; reeeelatively quickly.
-                helm-quick-update t
-                helm-M-x-requires-pattern nil
-                helm-ff-skip-boring-files t)))
+  :init
+  (require 'helm-config)
+  (setq helm-candidate-number-limit 100)
+  (setq helm-yas-display-key-on-candidate t)
+  ;; for pretty fast updates when hitting RET too quickly
+  ;; after typing fast:
+  (setq helm-idle-delay 0.0 ; update fast sources immediately (doesn't).
+        helm-input-idle-delay 0.01  ; this actually updates things
+                                        ; reeeelatively quickly.
+        helm-quick-update t
+        helm-M-x-requires-pattern nil
+        helm-ff-skip-boring-files t))
 
 (use-package helm-descbinds
   :ensure t
@@ -315,10 +315,10 @@
   :ensure t
   :commands (svn-status svn-examine projectile-vc)
   :bind ("C-c s" . svn-status)
-  :config (progn
-            (setq svn-status-hide-unmodified t)
-            (setq svn-status-hide-unknown t)
-            (setq svn-status-svn-file-coding-system 'utf-8)))
+  :config
+  (setq svn-status-hide-unmodified t
+        svn-status-hide-unknown t
+        svn-status-svn-file-coding-system 'utf-8))
 
 
 ;;------------------------------------------------------------------------------
@@ -339,11 +339,11 @@
 (use-package projectile
   :ensure t
   :diminish projectile-mode
-  :config (progn
-            (setq projectile-enable-caching t
-                  projectile-completion-system 'helm
-                  projectile-switch-project-action 'helm-projectile)
-            (projectile-global-mode)))
+  :config
+  (setq projectile-enable-caching t
+        projectile-completion-system 'helm
+        projectile-switch-project-action 'helm-projectile)
+  (projectile-global-mode))
 
 (use-package helm-projectile
   :ensure t
@@ -368,12 +368,12 @@
                     company-select-previous
                     company-complete-selection
                     company-complete-number)))
-  :config (progn
-            (use-package company-statistics
+  :config
+  (use-package company-statistics
               :ensure t
               :init
               (company-statistics-mode))
-            (add-hook 'prog-mode-hook 'company-mode)))
+  (add-hook 'prog-mode-hook 'company-mode))
 
 (use-package helm-company
   :ensure t
@@ -387,9 +387,8 @@
 (use-package yasnippet
   :ensure t
   :commands (yas-expand yas-insert-snippet)
-  :config (progn
-            (use-package java-snippets)
-            (yas-minor-mode)))
+  :config
+  (yas-minor-mode))
 
 
 ;;------------------------------------------------------------------------------
@@ -404,14 +403,14 @@
          ("M-," . helm-gtags-pop-stack)
          ("C-c <" . helm-gtags-previous-history)
          ("C-c >" . helm-gtags-next-history))
-  :config (progn
-            (setq helm-gtags-ignore-case t
-                  helm-gtags-auto-update nil
-                  helm-gtags-use-input-at-cursor t
-                  helm-gtags-pulse-at-cursor t
-                  helm-gtags-prefix-key "\C-cg"
-                  helm-gtags-suggested-key-mapping t)
-            (add-hook 'dired-mode-hook 'helm-gtags-mode)))
+  :config
+  (setq helm-gtags-ignore-case t
+        helm-gtags-auto-update nil
+        helm-gtags-use-input-at-cursor t
+        helm-gtags-pulse-at-cursor t
+        helm-gtags-prefix-key "\C-cg"
+        helm-gtags-suggested-key-mapping t)
+  (add-hook 'dired-mode-hook 'helm-gtags-mode))
 
 (use-package ggtags
   :ensure t
@@ -452,49 +451,50 @@
 ;; C/C++ and Java
 ;;------------------------------------------------------------------------------
 (use-package cc-mode
-  :init (progn
-          (use-package company-c-headers
-            :ensure t
-            ;; :config
-            ;; (add-to-list 'company-c-headers-path-system "/usr/include/c++/5/")
-            )
+  :init
+  (use-package company-c-headers
+    :ensure t
+    ;; :config
+    ;; (add-to-list 'company-c-headers-path-system "/usr/include/c++/5/")
+    )
 
-          (add-to-list 'company-backends 'company-gtags)
-          (add-to-list 'company-backends 'company-c-headers)
-          (setq company-backends (delete 'company-semantic company-backends))
+  (add-to-list 'company-backends 'company-gtags)
+  (add-to-list 'company-backends 'company-c-headers)
+  (setq company-backends (delete 'company-semantic company-backends))
 
-          (use-package c-eldoc
-            :ensure t
-            ;; :init
-            ;; (setq c-eldoc-includes "`pkg-config gtk+-2.0 --cflags` -I./ -I../ ")
-            :config
-            (add-hook 'c-mode-hook 'c-turn-on-eldoc-mode)
-            (add-hook 'c++-mode-hook 'c-turn-on-eldoc-mode))
+  (use-package c-eldoc
+    :ensure t
+    ;; :init
+    ;; (setq c-eldoc-includes "`pkg-config gtk+-2.0 --cflags` -I./ -I../ ")
+    :config
+    (add-hook 'c-mode-hook 'c-turn-on-eldoc-mode)
+    (add-hook 'c++-mode-hook 'c-turn-on-eldoc-mode))
 
-          (add-hook 'c-mode-common-hook
-                    (lambda ()
-                      (setq c-basic-offset 4
-                            indent-tabs-mode nil
-                            tab-width 4
-                            c-tab-always-indent t)
-                      (subword-mode t)
-                      (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
-                        (helm-gtags-mode 1))
-                      (when (derived-mode-p 'c-mode 'c++-mode)
-                        ;; emacs-c-opening-corresponding-header-file
-                        (local-set-key (kbd "C-x C-o") 'ff-find-other-file)
-                        (setq cc-search-directories '("."
-                                                      "/usr/include"
-                                                      "/usr/local/include/*"
-                                                      "../*/include"))
-                        ;; make a #define be left-aligned
-                        (setq c-electric-pound-behavior '(alignleft)))))
-          (add-hook 'c-mode-hook (lambda ()
-                                   (c-set-style "K&R")
-                                   (setq c-basic-offset 4)))
-          (add-hook 'c++-mode-hook (lambda ()
-                                     (c-set-style "Stroustrup")
-                                     (setq flycheck-gcc-language-standard "c++11")))))
+  (add-hook 'c-mode-common-hook
+            (lambda ()
+              (setq c-basic-offset 4
+                    indent-tabs-mode nil
+                    tab-width 4
+                    c-tab-always-indent t)
+              (subword-mode t)
+              (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
+                (helm-gtags-mode 1))
+              (when (derived-mode-p 'c-mode 'c++-mode)
+                ;; emacs-c-opening-corresponding-header-file
+                (local-set-key (kbd "C-x C-o") 'ff-find-other-file)
+                (setq cc-search-directories '("."
+                                              "/usr/include"
+                                              "/usr/local/include/*"
+                                              "../*/include"))
+                ;; make a #define be left-aligned
+                (setq c-electric-pound-behavior '(alignleft)))))
+
+  (add-hook 'c-mode-hook (lambda ()
+                           (c-set-style "K&R")
+                           (setq c-basic-offset 4)))
+  (add-hook 'c++-mode-hook (lambda ()
+                             (c-set-style "Stroustrup")
+                             (setq flycheck-gcc-language-standard "c++11"))))
 
 
 ;;------------------------------------------------------------------------------
@@ -502,12 +502,11 @@
 ;;------------------------------------------------------------------------------
 (use-package jdee
   :mode ("\\.java\\'" . jdee-mode)
-  :init (progn
-          (add-hook 'jdee-mode-hook (lambda ()  (c-set-style "java")))
-          (autoload 'jdee-mode "jdee" "jdee mode" t))
-  :config (progn
-            (setq jdee-server-dir (expand-file-name "java"
-                                                    user-emacs-directory))))
+  :init
+  (add-hook 'jdee-mode-hook (lambda ()  (c-set-style "java")))
+  (autoload 'jdee-mode "jdee" "jdee mode" t)
+  :config
+  (setq jdee-server-dir (expand-file-name "java" user-emacs-directory)))
 
 
 ;;------------------------------------------------------------------------------
@@ -515,12 +514,12 @@
 ;;------------------------------------------------------------------------------
 (use-package gdb-mi
   :commands (gdb)
-  :init (progn
-          ;; use gdb-many-windows by default
-          (setq gdb-many-windows t)
-          ;; Non-nil means display source file containing the main
-          ;; routine at startup
-          (setq gdb-show-main t)))
+  :init
+  ;; use gdb-many-windows by default
+  (setq gdb-many-windows t)
+  ;; Non-nil means display source file containing the main
+  ;; routine at startup
+  (setq gdb-show-main t))
 
 (use-package gud
   :commands (gdb)
@@ -534,8 +533,9 @@
 (use-package paredit
   :ensure t
   :diminish paredit-mode
-  :init (use-package paredit-everywhere
-          :ensure t))
+  :init
+  (use-package paredit-everywhere
+    :ensure t))
 
 
 ;;------------------------------------------------------------------------------
@@ -563,14 +563,15 @@
 (use-package slime
   :ensure t
   :commands slime
-  :init (setq inferior-lisp-program (or (executable-find "sbcl")
-                                        (executable-find "/usr/bin/sbcl")
-                                        (executable-find "/usr/local/bin/sbcl")
-                                        "sbcl"))
-  :config (progn
-            (require 'slime-autoloads)
-            (slime-setup '(slime-fancy))
-            (add-hook 'slime-repl-mode-hook (lambda () (paredit-mode t)))))
+  :init
+  (setq inferior-lisp-program (or (executable-find "sbcl")
+                                  (executable-find "/usr/bin/sbcl")
+                                  (executable-find "/usr/local/bin/sbcl")
+                                  "sbcl"))
+  :config
+  (require 'slime-autoloads)
+  (slime-setup '(slime-fancy))
+  (add-hook 'slime-repl-mode-hook (lambda () (paredit-mode t))))
 
 
 ;;------------------------------------------------------------------------------
@@ -578,23 +579,25 @@
 ;;------------------------------------------------------------------------------
 (use-package clojure-mode
   :ensure t
-  :init (use-package flycheck-clojure
-          :ensure t
-          :config (flycheck-clojure-setup))
-  :config (add-hook 'clojure-mode-hook (lambda ()
-                                         (setq indent-tabs-mode nil)
-                                         (paredit-mode t)
-                                         (subword-mode t))))
+  :init
+  (use-package flycheck-clojure
+    :ensure t
+    :config (flycheck-clojure-setup))
+  :config
+  (add-hook 'clojure-mode-hook (lambda ()
+                                 (setq indent-tabs-mode nil)
+                                 (paredit-mode t)
+                                 (subword-mode t))))
 
 (use-package cider
   :ensure t
   :commands (cider cider-connect cider-jack-in)
-  :config (progn
-            (add-hook 'cider-mode-hook (lambda ()
-                                         (cider-turn-on-eldoc-mode t)))
-            (add-hook 'cider-repl-mode-hook (lambda ()
-                                              (paredit-mode t)
-                                              (subword-mode t)))))
+  :config
+  (add-hook 'cider-mode-hook (lambda ()
+                               (cider-turn-on-eldoc-mode t)))
+  (add-hook 'cider-repl-mode-hook (lambda ()
+                                    (paredit-mode t)
+                                    (subword-mode t))))
 
 
 ;;------------------------------------------------------------------------------
@@ -607,27 +610,29 @@
 
 (use-package geiser
   :ensure t
-  :init (progn
-          (setq geiser-active-implementations '(guile))
-          (setq geiser-guile-binary (or (executable-find "guile")
-                                        (executable-find "/usr/bin/guile")
-                                        (executable-find "/usr/local/bin/guile")
-                                        "guile"))))
+  :init
+  (setq geiser-active-implementations '(guile))
+  (setq geiser-guile-binary (or (executable-find "guile")
+                                (executable-find "/usr/bin/guile")
+                                (executable-find "/usr/local/bin/guile")
+                                "guile")))
 
 
 ;;------------------------------------------------------------------------------
 ;; Python
 ;;------------------------------------------------------------------------------
-(add-hook 'python-mode-hook (lambda ()
-                              (setq indent-tabs-mode nil)
-                              (helm-gtags-mode 1)))
 
 (use-package elpy
   :ensure t
-  :init (progn
-          (elpy-enable)
-          (elpy-use-ipython)
-          (setq python-shell-interpreter-args "--simple-prompt -i")))
+  :config
+  (elpy-enable)
+  (setq elpy-rpc-python-command "python3")
+  (setq elpy-rpc-backend "jedi")
+  (elpy-use-cpython "/usr/bin/python3")
+  ;; (setq python-shell-interpreter-args "--simple-prompt -i")
+  (add-hook 'python-mode-hook (lambda ()
+                              (setq indent-tabs-mode nil)
+                              (helm-gtags-mode 1))))
 
 (use-package ein
   :ensure t)
@@ -662,9 +667,10 @@
 
 (use-package json-mode
   :ensure t
-  :config (add-hook 'json-mode-hook (lambda ()
-                                      (make-local-variable 'js-indent-level)
-                                      (setq js-indent-level 2))))
+  :config
+  (add-hook 'json-mode-hook (lambda ()
+                              (make-local-variable 'js-indent-level)
+                              (setq js-indent-level 2))))
 
 
 ;;------------------------------------------------------------------------------
@@ -676,19 +682,19 @@
          ("\\.isml?$" . nxml-mode)
          ("\\.smil$" . nxml-mode))
   :init (add-to-list 'magic-mode-alist '("<\\?xml " . nxml-mode))
-  :config (progn
-            (defun nxml-pretty-print (begin end)
-              "Pretty-print selected region."
-              (interactive "r")
-              (save-excursion
-                (goto-char begin)
-                (while (search-forward-regexp "\>[ \\t]*\<" nil t)
-                  (backward-char) (insert "\n"))
-                (indent-region begin end)))
-            (defun nxml-pretty-print-buffer ()
-              "Pretty-print current region."
-              (interactive)
-              (nxml-pretty-print (point-min) (point-max)))))
+  :config
+  (defun nxml-pretty-print (begin end)
+    "Pretty-print selected region."
+    (interactive "r")
+    (save-excursion
+      (goto-char begin)
+      (while (search-forward-regexp "\>[ \\t]*\<" nil t)
+        (backward-char) (insert "\n"))
+      (indent-region begin end)))
+  (defun nxml-pretty-print-buffer ()
+    "Pretty-print current region."
+    (interactive)
+    (nxml-pretty-print (point-min) (point-max))))
 
 
 ;;------------------------------------------------------------------------------
@@ -711,11 +717,11 @@
 ;; sr-speedbar
 ;;------------------------------------------------------------------------------
 (use-package sr-speedbar
-  :init (progn
-          (setq sr-speedbar-auto-refresh nil)
-          ;; (setq speedbar-show-unknown-files t)
-          ;; (setq speedbar-use-images nil)
-          (setq sr-speedbar-right-side nil)))
+  :init
+  (setq sr-speedbar-auto-refresh nil)
+  ;; (setq speedbar-show-unknown-files t)
+  ;; (setq speedbar-use-images nil)
+  (setq sr-speedbar-right-side nil))
 
 
 
