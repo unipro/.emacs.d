@@ -193,15 +193,21 @@
 (when (display-graphic-p)
   (let ((fontset "fontset-default"))
     (cond ((member "Droid Sans Mono" (font-family-list))
-           (set-frame-font "Droid Sans Mono")
+           (set-fontset-font fontset 'unicode "Droid Sans Mono")
            (set-face-font 'default "Droid Sans Mono"))
           ((member "DejaVu Sans Mono" (font-family-list))
-           (set-frame-font "DejaVu Sans Mono")
-           (set-face-font 'default "DejaVu Sans Mono")))
-    (when (or (member "나눔고딕코딩" (font-family-list))
-              (member "NanumGothicCoding" (font-family-list)))
-      (set-fontset-font fontset 'hangul
-                        '("NanumGothicCoding" . "unicode-bmp")))))
+           (set-fontset-font fontset 'unicode "DejaVu Sans Mono")
+           (set-face-font 'default "DejaVu Sans Mono"))
+          (t
+           (message "'Droid Sans Mono' or 'DejaVu Sans Mono' are not installed")))
+    (cond ((member "NanumGothicCoding" (font-family-list))
+           (set-fontset-font fontset 'hangul
+                             '("NanumGothicCoding" . "unicode-bmp")))
+          ((member "나눔고딕코딩" (font-family-list))
+           (set-fontset-font fontset 'hangul
+                             '("나눔고딕코딩" . "unicode-bmp")))
+          (t
+           (message "'NanumGothicCoding' or '나눔고딕코딩' are not installed")))))
 
 (use-package color-theme-sanityinc-solarized
   :ensure t
@@ -400,7 +406,7 @@
          ("C-c >" . helm-gtags-next-history))
   :config (progn
             (setq helm-gtags-ignore-case t
-                  helm-gtags-auto-update t
+                  helm-gtags-auto-update nil
                   helm-gtags-use-input-at-cursor t
                   helm-gtags-pulse-at-cursor t
                   helm-gtags-prefix-key "\C-cg"
