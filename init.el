@@ -188,6 +188,9 @@
         windmove-wrap-around t))
 
 (use-package winner
+  :bind (:map winner-mode-map
+         ("C-c w u" . winner-undo)
+         ("C-c w r" . winner-redo))
   :init (winner-mode t))
 
 (use-package imenu
@@ -519,7 +522,7 @@
   :commands (gdb)
   :init
   ;; use gdb-many-windows by default
-  (setq gdb-many-windows t)
+  (setq gdb-many-windows nil)
   ;; Non-nil means display source file containing the main
   ;; routine at startup
   (setq gdb-show-main t))
