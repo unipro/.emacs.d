@@ -51,10 +51,9 @@
   ;; (setq mac-command-modifier 'meta)
   ;; (setq mac-option-modifier 'none)
   (use-package exec-path-from-shell
-    :ensure t
-    :config (progn
-              (exec-path-from-shell-initialize)
-              (exec-path-from-shell-copy-env "PATH"))))
+    :config
+    (exec-path-from-shell-initialize)
+    (exec-path-from-shell-copy-env "PATH")))
 
 
 ;;----------------------------------------------------------------------------
@@ -106,8 +105,8 @@
 (use-package ido-mode
   :init (ido-mode t)
   :config
-  (setq ido-everywhere t)
-  (setq ido-enable-flex-matching t))
+  (setq ido-everywhere t
+        ido-enable-flex-matching t))
 
 (use-package tramp
   :config
@@ -179,6 +178,10 @@
 (setq inhibit-startup-echo-area-message "Byungwan Jun")
 
 (use-package windmove
+  :bind (("C-c j" . windmove-left)
+         ("C-c l" . windmove-right)
+         ("C-c i" . windmove-up)
+         ("C-c k" . windmove-down))
   :init
   (windmove-default-keybindings)
   (setq shift-select-mode nil
