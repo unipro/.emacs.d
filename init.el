@@ -326,7 +326,7 @@
 
 
 ;;----------------------------------------------------------------------------
-;; Subversion
+;; Version Control
 ;;----------------------------------------------------------------------------
 (defun vc-status ()
   "Show the status of the current Git repository or Subversion working copy."
