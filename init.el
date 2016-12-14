@@ -209,11 +209,11 @@
     (cond ((member "NanumGothicCoding" (font-family-list))
            (set-fontset-font fontset 'hangul
                              '("NanumGothicCoding" . "unicode-bmp")))
-          ((member "나눔고딕코딩" (font-family-list))
+          ((member "나눔고딕코딩" (font-family-list))
            (set-fontset-font fontset 'hangul
-                             '("나눔고딕코딩" . "unicode-bmp")))
+                             '("나눔고딕코딩" . "unicode-bmp")))
           (t
-           (message "'NanumGothicCoding' or '나눔고딕코딩' are not installed")))))
+           (message "'NanumGothicCoding' or '나눔고딕코딩' are not installed")))))
 
 (use-package color-theme-sanityinc-solarized
   :ensure t
@@ -643,7 +643,10 @@
   (elpy-enable)
   (setq elpy-rpc-python-command "python3")
   (setq elpy-rpc-backend "jedi")
-  (elpy-use-cpython "/usr/bin/python3")
+  (elpy-use-cpython (or (executable-find "python3")
+                        (executable-find "/usr/bin/python3")
+                        (executable-find "/usr/local/bin/python3")
+                        "python3"))
   ;; (setq python-shell-interpreter-args "--simple-prompt -i")
   (add-hook 'python-mode-hook (lambda ()
                               (setq indent-tabs-mode nil)
