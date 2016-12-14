@@ -302,8 +302,7 @@
 ;;----------------------------------------------------------------------------
 (use-package magit
   :ensure t
-  :commands (magit-status projectile-vc)
-  :bind ("C-c g" . magit-status))
+  :commands (magit-status projectile-vc))
 
 ;; (use-package helm-ls-git
 ;;   :ensure t
@@ -320,11 +319,24 @@
 (use-package psvn
   :ensure t
   :commands (svn-status svn-examine projectile-vc)
-  :bind ("C-c s" . svn-status)
   :config
   (setq svn-status-hide-unmodified t
         svn-status-hide-unknown t
         svn-status-svn-file-coding-system 'utf-8))
+
+
+;;----------------------------------------------------------------------------
+;; Subversion
+;;----------------------------------------------------------------------------
+(defun vc-status ()
+  "Show the status of the current Git repository or Subversion working copy."
+  (interactive)
+  (cond ((eq (vc-backend (buffer-file-name)) 'Git)
+         (magit-status))
+        ((eq (vc-backend (buffer-file-name)) 'SVN)
+         (svn-status default-directory))
+        (t (vc-dir default-directory))))
+(global-set-key (kbd "C-c s")  'vc-status)
 
 
 ;;------------------------------------------------------------------------------
@@ -521,11 +533,8 @@
 (use-package gdb-mi
   :commands (gdb)
   :init
-  ;; use gdb-many-windows by default
-  (setq gdb-many-windows nil)
-  ;; Non-nil means display source file containing the main
-  ;; routine at startup
-  (setq gdb-show-main t))
+  (setq gdb-many-windows nil
+        gdb-show-main t))
 
 (use-package gud
   :commands (gdb)
