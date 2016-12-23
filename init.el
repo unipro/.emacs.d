@@ -209,11 +209,14 @@
     (cond ((member "NanumGothicCoding" (font-family-list))
            (set-fontset-font fontset 'hangul
                              '("NanumGothicCoding" . "unicode-bmp")))
+          ((member "나눔고딕코딩" (font-family-list))
+           (set-fontset-font fontset 'hangul
+                             '("나눔고딕코딩" . "unicode-bmp")))
           ((member "나눔고딕코딩" (font-family-list))
            (set-fontset-font fontset 'hangul
                              '("나눔고딕코딩" . "unicode-bmp")))
           (t
-           (message "'NanumGothicCoding' or '나눔고딕코딩' are not installed")))))
+           (message "'NanumGothicCoding' or '나눔고딕코딩' are not installed")))))
 
 (use-package color-theme-sanityinc-solarized
   :ensure t
