@@ -271,7 +271,7 @@
   :diminish helm-mode
   :bind (("C-c h" . helm-mini)
          ("C-h a" . helm-apropos)
-         ("C-x C-b" . helm-buffers-list)
+         ;; ("C-x C-b" . helm-buffers-list)
          ;; ("C-x b" . helm-buffers-list)
          ("M-y" . helm-show-kill-ring)
          ("M-x" . helm-M-x)
@@ -650,10 +650,12 @@
                         (executable-find "/usr/bin/python3")
                         (executable-find "/usr/local/bin/python3")
                         "python3"))
-  ;; (setq python-shell-interpreter-args "--simple-prompt -i")
+  (elpy-use-ipython)
+  (setq python-shell-interpreter-args "--simple-prompt -i")
   (add-hook 'python-mode-hook (lambda ()
                               (setq indent-tabs-mode nil)
-                              (helm-gtags-mode 1))))
+                              ;; (helm-gtags-mode 1)
+                              )))
 
 (use-package ein
   :ensure t)
