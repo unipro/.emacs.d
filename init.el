@@ -328,20 +328,6 @@
         svn-status-svn-file-coding-system 'utf-8))
 
 
-;;----------------------------------------------------------------------------
-;; Version Control
-;;----------------------------------------------------------------------------
-(defun vc-status ()
-  "Show the status of the current Git repository or Subversion working copy."
-  (interactive)
-  (cond ((eq (vc-backend (buffer-file-name)) 'Git)
-         (magit-status))
-        ((eq (vc-backend (buffer-file-name)) 'SVN)
-         (svn-status default-directory))
-        (t (vc-dir default-directory))))
-(global-set-key (kbd "C-c s")  'vc-status)
-
-
 ;;------------------------------------------------------------------------------
 ;; org-mode
 ;;------------------------------------------------------------------------------
