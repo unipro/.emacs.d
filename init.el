@@ -206,7 +206,10 @@
            (set-face-font 'default "DejaVu Sans Mono"))
           (t
            (message "'Droid Sans Mono' or 'DejaVu Sans Mono' are not installed")))
-    (cond ((member "NanumGothicCoding" (font-family-list))
+    (cond ((member "D2Coding" (font-family-list))
+           (set-fontset-font fontset 'hangul
+                             '("D2Coding" . "unicode-bmp")))
+          ((member "NanumGothicCoding" (font-family-list))
            (set-fontset-font fontset 'hangul
                              '("NanumGothicCoding" . "unicode-bmp")))
           ((member "나눔고딕코딩" (font-family-list))
@@ -216,7 +219,7 @@
            (set-fontset-font fontset 'hangul
                              '("나눔고딕코딩" . "unicode-bmp")))
           (t
-           (message "'NanumGothicCoding' or '나눔고딕코딩' are not installed")))))
+           (message "'D2Coding' or 'NanumGothicCoding' are not installed")))))
 
 (use-package color-theme-sanityinc-solarized
   :ensure t
