@@ -336,11 +336,54 @@
 ;;------------------------------------------------------------------------------
 (use-package org
   :init (setq org-log-done t
-              org-directory "~/Documents/Org"
-              org-mobile-directory "~/Dropbox/Apps/MobileOrg"
-              org-agenda-files `(,(concat org-directory "/tasks.org"))
-              org-mobile-inbox-for-pull (concat org-directory "/index.org"))
-  :config (add-hook 'org-mode-hook 'company-mode))
+              org-use-fast-todo-selection t
+              org-todo-keywords '((type "TODO(t)"
+                                        "STARTED(s)"
+                                        "WAITING(w@/!)"
+                                        "|"
+                                        "DONE(d!/!)"
+                                        "CANCELLED(c@/!)"))
+              org-todo-keyword-faces '(("TODO"
+                                        :foreground "red"
+                                        :weight bold)
+                                       ("STARTED"
+                                        :foreground "blue"
+                                        :weight bold)
+                                       ("DONE"
+                                        :foreground "forest green"
+                                        :weight bold)
+                                       ("WAITING"
+                                        :foreground "orange"
+                                        :weight bold)
+                                       ("CANCELLED"
+                                        :foreground "forest green"
+                                        :weight bold))
+              org-directory "~/org"
+              org-default-notes-file (concat org-directory "/refile.org")
+              org-agenda-files `(,(concat org-directory "/work.org"))
+              org-mobile-directory "/var/dav/org"
+              org-mobile-inbox-for-pull (concat org-directory "/refile.org")
+              org-mobile-files `(,(concat org-directory "/work.org")))
+  :config
+  (add-hook 'org-mode-hook 'company-mode)
+  ;; http://blog.zhengdong.me/2012/06/16/org-my-life/
+  (defvar org-mobile-sync-timer nil)
+  (defvar org-mobile-sync-idle-secs (* 60 10))
+  (defun org-mobile-sync ()
+    (interactive)
+    (org-mobile-pull)
+    (org-mobile-push))
+  (defun org-mobile-sync-enable ()
+    "enable mobile org idle sync"
+    (interactive)
+    (setq org-mobile-sync-timer
+          (run-with-idle-timer org-mobile-sync-idle-secs t
+                               'org-mobile-sync)));
+  (defun org-mobile-sync-disable ()
+    "disable mobile org idle sync"
+    (interactive)
+    (cancel-timer org-mobile-sync-timer))
+  (org-mobile-sync-enable))
 
 
 ;;------------------------------------------------------------------------------
