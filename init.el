@@ -335,35 +335,42 @@
 ;; org-mode
 ;;------------------------------------------------------------------------------
 (use-package org
-  :init (setq org-log-done t
-              org-use-fast-todo-selection t
-              org-todo-keywords '((type "TODO(t)"
-                                        "STARTED(s)"
-                                        "WAITING(w@/!)"
-                                        "|"
-                                        "DONE(d!/!)"
-                                        "CANCELLED(c@/!)"))
-              org-todo-keyword-faces '(("TODO"
-                                        :foreground "red"
-                                        :weight bold)
-                                       ("STARTED"
-                                        :foreground "blue"
-                                        :weight bold)
-                                       ("DONE"
-                                        :foreground "forest green"
-                                        :weight bold)
-                                       ("WAITING"
-                                        :foreground "orange"
-                                        :weight bold)
-                                       ("CANCELLED"
-                                        :foreground "forest green"
-                                        :weight bold))
-              org-directory "~/org"
-              org-default-notes-file (concat org-directory "/refile.org")
-              org-agenda-files `(,(concat org-directory "/work.org"))
-              org-mobile-directory "/var/dav/org"
-              org-mobile-inbox-for-pull (concat org-directory "/refile.org")
-              org-mobile-files `(,(concat org-directory "/work.org")))
+  :init
+  (setq org-log-done t
+        org-use-fast-todo-selection t
+        org-todo-keywords '((type "TODO(t)"
+                                  "STARTED(s)"
+                                  "WAITING(w@/!)"
+                                  "|"
+                                  "DONE(d!/!)"
+                                  "CANCELLED(c@/!)"))
+        org-todo-keyword-faces '(("TODO"
+                                  :foreground "red"
+                                  :weight bold)
+                                 ("STARTED"
+                                  :foreground "blue"
+                                  :weight bold)
+                                 ("DONE"
+                                  :foreground "forest green"
+                                  :weight bold)
+                                 ("WAITING"
+                                  :foreground "orange"
+                                  :weight bold)
+                                 ("CANCELLED"
+                                  :foreground "forest green"
+                                  :weight bold))
+        org-directory "~/org"
+        org-default-notes-file (concat org-directory "/refile.org")
+        org-agenda-files `(,(concat org-directory "/work.org"))
+        org-mobile-directory "/var/dav/org"
+        org-mobile-inbox-for-pull (concat org-directory "/refile.org")
+        org-mobile-files `(,(concat org-directory "/work.org")))
+  ;; make org mode allow eval of some langs
+  (org-babel-do-load-languages 'org-babel-load-languages
+                               '((emacs-lisp . t)
+                                 (clojure . t)
+                                 (python . t)
+                                 (ruby . t)))
   :config
   (add-hook 'org-mode-hook 'company-mode)
   ;; http://blog.zhengdong.me/2012/06/16/org-my-life/
