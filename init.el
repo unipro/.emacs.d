@@ -362,7 +362,7 @@
         org-directory "~/org"
         org-default-notes-file (concat org-directory "/refile.org")
         org-agenda-files `(,(concat org-directory "/work.org"))
-        org-mobile-directory "/var/dav/org"
+        org-mobile-directory "~/Dropbox/org"
         org-mobile-inbox-for-pull (concat org-directory "/refile.org")
         org-mobile-files `(,(concat org-directory "/work.org")))
   ;; make org mode allow eval of some langs
