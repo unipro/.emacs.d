@@ -650,8 +650,7 @@
   :ensure t
   :commands (cider cider-connect cider-jack-in)
   :config
-  (add-hook 'cider-mode-hook (lambda ()
-                               (cider-turn-on-eldoc-mode t)))
+  (add-hook 'cider-mode-hook 'eldoc-mode)
   (add-hook 'cider-repl-mode-hook (lambda ()
                                     (paredit-mode t)
                                     (subword-mode t))))
