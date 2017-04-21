@@ -709,6 +709,21 @@
 
 
 ;;------------------------------------------------------------------------------
+;; Erlang
+;;------------------------------------------------------------------------------
+(use-package erlang
+  :ensure t
+  :config (require 'erlang-start))
+
+;; (use-package company-distel
+;;   :ensure t
+;;   :config
+;;   (use-package company-distel-frontend
+;;     :ensure t)
+;;   (add-to-list 'company-backends 'company-distel))
+
+
+;;------------------------------------------------------------------------------
 ;; Lua
 ;;------------------------------------------------------------------------------
 (add-hook 'lua-mode-hook (lambda () (helm-gtags-mode 1)))
