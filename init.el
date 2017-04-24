@@ -713,7 +713,8 @@
 ;;------------------------------------------------------------------------------
 (use-package erlang
   :ensure t
-  :config (require 'erlang-start))
+  ;; :config (require 'erlang-start)
+  )
 
 ;; (use-package company-distel
 ;;   :ensure t
@@ -721,6 +722,13 @@
 ;;   (use-package company-distel-frontend
 ;;     :ensure t)
 ;;   (add-to-list 'company-backends 'company-distel))
+
+
+;;------------------------------------------------------------------------------
+;; Elixir
+;;------------------------------------------------------------------------------
+(use-package elixir-mode
+  :ensure t)
 
 
 ;;------------------------------------------------------------------------------
