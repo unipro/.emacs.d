@@ -643,6 +643,16 @@
   :config
   (add-hook 'clojure-mode-hook (lambda ()
                                  (setq indent-tabs-mode nil)
+
+                                 ;; from Emacs and Clojure, a Lispy Love Affair
+                                 (setq clojure-indent-style :always-align)
+                                 (put-clojure-indent 'symbol 2)
+                                 (put-clojure-indent 'GET 2)
+                                 (define-clojure-indent
+                                   (-> 1)
+                                   (letfn '(1 ((:defn)) nil))
+                                   (defrecord '(2 :form :form (1))))
+
                                  (paredit-mode t)
                                  (subword-mode t))))
 
@@ -697,6 +707,15 @@
 
 (use-package ein
   :ensure t)
+
+
+;;------------------------------------------------------------------------------
+;; HTML
+;;------------------------------------------------------------------------------
+(use-package web-mode
+  :ensure t
+  :mode (("\\.html\\'" . web-mode)
+         ("\\.php\\'" . web-mode)))
 
 
 ;;------------------------------------------------------------------------------
@@ -779,6 +798,14 @@
     "Pretty-print current region."
     (interactive)
     (nxml-pretty-print (point-min) (point-max))))
+
+
+;;------------------------------------------------------------------------------
+;; OpenCL
+;;------------------------------------------------------------------------------
+(use-package opencl-mode
+  :ensure t
+  :mode (("\\.cl$" . opencl-mode)))
 
 
 ;;------------------------------------------------------------------------------
