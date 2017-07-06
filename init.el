@@ -187,6 +187,9 @@
   (setq shift-select-mode nil
         windmove-wrap-around t))
 
+(use-package ace-window
+  :bind (("C-x o" . ace-window)))
+
 (use-package winner
   :bind (:map winner-mode-map
          ("C-c w u" . winner-undo)
