@@ -188,7 +188,7 @@
         windmove-wrap-around t))
 
 (use-package ace-window
-  :bind (("C-x o" . ace-window)))
+  :bind (("M-p" . ace-window)))
 
 (use-package winner
   :bind (:map winner-mode-map
