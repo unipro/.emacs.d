@@ -865,6 +865,8 @@
 (add-to-list 'safe-local-variable-values '(nxml-child-indent . 4))
 (add-to-list 'safe-local-variable-values '(nxml-attribute-indent . 4))
 
+(setq confirm-kill-emacs 'y-or-n-p)
+
 
 ;;----------------------------------------------------------------------------
 ;; Allow access from emacsclient
