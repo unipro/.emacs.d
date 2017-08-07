@@ -24,8 +24,10 @@
 (setq package-enable-at-startup nil)
 ;; (add-to-list 'package-archives
 ;;              '("marmalade" . "http://marmalade-repo.org/packages/"))
+;; (add-to-list 'package-archives
+;;              '("melpa" . "https://melpa.org/packages/") t)
 (add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
+             '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
 (package-initialize)
 
 ;; Bootstrap `use-package'
@@ -159,6 +161,7 @@
 ;; (setq-default indicate-empty-lines t)
 
 (use-package page-break-lines-mode
+  :ensure page-break-lines
   :diminish page-break-lines-mode
   :init (global-page-break-lines-mode))
 
@@ -178,6 +181,7 @@
 (setq inhibit-startup-echo-area-message "Byungwan Jun")
 
 (use-package windmove
+  :ensure t
   :bind (("C-c j" . windmove-left)
          ("C-c l" . windmove-right)
          ("C-c i" . windmove-up)
@@ -188,6 +192,7 @@
         windmove-wrap-around t))
 
 (use-package ace-window
+  :ensure t
   :bind (("M-p" . ace-window)))
 
 (use-package winner
@@ -327,6 +332,7 @@
 ;;----------------------------------------------------------------------------
 (use-package psvn
   :ensure t
+  ;; :pin melpa
   :commands (svn-status svn-examine projectile-vc)
   :config
   (setq svn-status-hide-unmodified t
@@ -517,6 +523,7 @@
   :init
   (use-package company-c-headers
     :ensure t
+    ;; :pin melpa
     ;; :config
     ;; (add-to-list 'company-c-headers-path-system "/usr/include/c++/5/")
     )
@@ -527,6 +534,7 @@
 
   (use-package c-eldoc
     :ensure t
+    ;; :pin melpa
     ;; :init
     ;; (setq c-eldoc-includes "`pkg-config gtk+-2.0 --cflags` -I./ -I../ ")
     :config
