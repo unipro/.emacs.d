@@ -245,7 +245,7 @@
   :ensure t
   :diminish flycheck-mode
   :commands flycheck-mode
-  :init (global-flycheck-mode)
+  ;; :init (global-flycheck-mode)
   :config
   (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled)
         flycheck-idle-change-delay 5.0))
@@ -299,11 +299,12 @@
                                         ; reeeelatively quickly.
         helm-quick-update t
         helm-M-x-requires-pattern nil
-        helm-ff-skip-boring-files t))
+        helm-ff-skip-boring-files t)
+  :config
+  (use-package helm-descbinds
+    :ensure t
+    :config (helm-descbinds-mode)))
 
-(use-package helm-descbinds
-  :ensure t
-  :config (helm-descbinds-mode))
 
 
 ;;----------------------------------------------------------------------------
@@ -318,8 +319,7 @@
 ;;   :bind (("C-x d" . helm-ls-git-ls)
 ;;          ("C-x C-d" . helm-browse-project)))
 
-(use-package helm-gitignore
-  :ensure t)
+;; (use-package helm-gitignore)
 
 
 ;;----------------------------------------------------------------------------
@@ -639,10 +639,10 @@
 ;;------------------------------------------------------------------------------
 (use-package clojure-mode
   :ensure t
-  :init
-  (use-package flycheck-clojure
-    :ensure t
-    :config (flycheck-clojure-setup))
+  ;; :init
+  ;; (use-package flycheck-clojure
+  ;;   :ensure t
+  ;;   :config (flycheck-clojure-setup))
   :config
   (add-hook 'clojure-mode-hook (lambda ()
                                  (setq indent-tabs-mode nil)
@@ -691,25 +691,25 @@
 ;; Python
 ;;------------------------------------------------------------------------------
 
-(use-package elpy
-  :ensure t
-  :config
-  (elpy-enable)
-  (setq elpy-rpc-python-command "python3")
-  (setq elpy-rpc-backend "jedi")
-  (elpy-use-cpython (or (executable-find "python3")
-                        (executable-find "/usr/bin/python3")
-                        (executable-find "/usr/local/bin/python3")
-                        "python3"))
-  (elpy-use-ipython)
-  (setq python-shell-interpreter-args "--simple-prompt -i")
-  (add-hook 'python-mode-hook (lambda ()
-                              (setq indent-tabs-mode nil)
-                              ;; (helm-gtags-mode 1)
-                              )))
+;; (use-package elpy
+;;   :ensure t
+;;   :config
+;;   (elpy-enable)
+;;   (setq elpy-rpc-python-command "python3")
+;;   (setq elpy-rpc-backend "jedi")
+;;   (elpy-use-cpython (or (executable-find "python3")
+;;                         (executable-find "/usr/bin/python3")
+;;                         (executable-find "/usr/local/bin/python3")
+;;                         "python3"))
+;;   (elpy-use-ipython)
+;;   (setq python-shell-interpreter-args "--simple-prompt -i")
+;;   (add-hook 'python-mode-hook (lambda ()
+;;                               (setq indent-tabs-mode nil)
+;;                               ;; (helm-gtags-mode 1)
+;;                               )))
 
-(use-package ein
-  :ensure t)
+;; (use-package ein
+;;   :ensure t)
 
 
 ;;------------------------------------------------------------------------------
