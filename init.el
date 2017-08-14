@@ -24,10 +24,10 @@
 (setq package-enable-at-startup nil)
 ;; (add-to-list 'package-archives
 ;;              '("marmalade" . "http://marmalade-repo.org/packages/"))
-;; (add-to-list 'package-archives
-;;              '("melpa" . "https://melpa.org/packages/") t)
 (add-to-list 'package-archives
-             '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
+             '("melpa" . "https://melpa.org/packages/") t)
+;; (add-to-list 'package-archives
+;;              '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
 (package-initialize)
 
 ;; Bootstrap `use-package'
@@ -836,8 +836,8 @@
 ;;------------------------------------------------------------------------------
 ;; Vala
 ;;------------------------------------------------------------------------------
-(use-package vala-mode
-  :ensure t)
+;; (use-package vala-mode
+;;   :ensure t)
 
 
 ;;------------------------------------------------------------------------------
