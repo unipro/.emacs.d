@@ -26,8 +26,8 @@
 ;;              '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/") t)
-;; (add-to-list 'package-archives
-;;              '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
+(add-to-list 'package-archives
+             '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
 (package-initialize)
 
 ;; Bootstrap `use-package'
@@ -36,6 +36,8 @@
   (package-install 'use-package))
 
 (setq use-package-verbose t)
+(setq use-package-always-ensure t)
+(setq use-package-always-bin "melpa-stable")
 
 (eval-when-compile
   (require 'use-package))
@@ -672,6 +674,7 @@
   :config
   (add-hook 'cider-mode-hook 'eldoc-mode)
   (add-hook 'cider-repl-mode-hook (lambda ()
+                                    (turn-on-eldoc-mode)
                                     (paredit-mode t)
                                     (subword-mode t))))
 
