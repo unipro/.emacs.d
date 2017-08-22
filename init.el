@@ -21,13 +21,16 @@
 ;; Package manager settings
 ;;----------------------------------------------------------------------------
 (require 'package)
-(setq package-enable-at-startup nil)
 ;; (add-to-list 'package-archives
 ;;              '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/") t)
+             '("org" . "http://orgmode.org/elpa/"))
 (add-to-list 'package-archives
-             '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
+             '("melpa" . "https://melpa.org/packages/"))
+(add-to-list 'package-archives
+             '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/"))
+(setq package-enable-at-startup nil)
+(setq package-archive-priorities '(("melpa-stable" . 1)))
 (package-initialize)
 
 ;; Bootstrap `use-package'
@@ -36,7 +39,7 @@
   (package-install 'use-package))
 
 (setq use-package-verbose t)
-(setq use-package-always-ensure t)
+;; (setq use-package-always-ensure t)
 (setq use-package-always-bin "melpa-stable")
 
 (eval-when-compile
