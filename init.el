@@ -525,7 +525,7 @@
 
 
 ;;------------------------------------------------------------------------------
-;; C/C++ and Java
+;; C/C++
 ;;------------------------------------------------------------------------------
 (use-package cc-mode
   :init
@@ -556,7 +556,7 @@
                     tab-width 4
                     c-tab-always-indent t)
               (subword-mode t)
-              (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
+              (when (derived-mode-p 'c-mode 'c++-mode 'asm-mode)
                 (helm-gtags-mode 1))
               (when (derived-mode-p 'c-mode 'c++-mode)
                 ;; emacs-c-opening-corresponding-header-file
@@ -577,18 +577,6 @@
 
 
 ;;------------------------------------------------------------------------------
-;; JDEE
-;;------------------------------------------------------------------------------
-(use-package jdee
-  :mode ("\\.java\\'" . jdee-mode)
-  :init
-  (add-hook 'jdee-mode-hook (lambda ()  (c-set-style "java")))
-  (autoload 'jdee-mode "jdee" "jdee mode" t)
-  :config
-  (setq jdee-server-dir (expand-file-name "java" user-emacs-directory)))
-
-
-;;------------------------------------------------------------------------------
 ;; GDB & GUD
 ;;------------------------------------------------------------------------------
 (use-package gdb-mi
@@ -601,6 +589,11 @@
   :commands (gdb)
   :bind ("C-x C-a C-g" . gud-run)
   :init (add-hook 'gud-mode-hook #'gud-tooltip-mode))
+
+
+;;------------------------------------------------------------------------------
+;; Java
+;;------------------------------------------------------------------------------
 
 
 ;;------------------------------------------------------------------------------
