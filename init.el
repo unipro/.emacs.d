@@ -315,6 +315,10 @@
     :ensure t
     :config (helm-descbinds-mode)))
 
+;;; https://github.com/syohex/emacs-helm-ag
+(use-package helm-ag
+  :ensure t)
+
 
 ;;----------------------------------------------------------------------------
 ;; Git
