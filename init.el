@@ -331,7 +331,10 @@
 ;;----------------------------------------------------------------------------
 (use-package magit
   :ensure t
-  :commands (magit-status projectile-vc))
+  :commands (magit-status projectile-vc)
+  :init
+  (if *is-a-win-nt*
+      (setenv "SSH_ASKPASS" "git-gui--askpass")))
 
 ;; (use-package helm-ls-git
 ;;   :ensure t
