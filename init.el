@@ -11,6 +11,7 @@
 ;; Bootstrap config
 ;;----------------------------------------------------------------------------
 (defconst *is-a-mac* (eq system-type 'darwin))
+(defconst *is-a-win-nt* (eq system-type 'windows-nt))
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (setq gc-cons-threshold (* 128 1024 1024))
 
@@ -74,7 +75,11 @@
       (t
        (setq-default coding-system-for-read 'utf-8)
        (set-file-name-coding-system 'utf-8)))
-(set-selection-coding-system 'utf-8)
+(cond (*is-a-win-nt*
+       (set-clipboard-coding-system 'utf-16-le)
+       (set-selection-coding-system 'utf-16-le))
+      (t
+       (set-selection-coding-system 'utf-8)))
 (set-keyboard-coding-system 'utf-8-unix)
 (set-terminal-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
