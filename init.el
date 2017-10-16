@@ -198,7 +198,8 @@
 
 (use-package ace-window
   :ensure t
-  :bind (("M-p" . ace-window)))
+  :bind (("M-p" . ace-window)
+         ("C-x o" . ace-window)))
 
 (use-package winner
   :bind (:map winner-mode-map
@@ -407,7 +408,8 @@
     "disable mobile org idle sync"
     (interactive)
     (cancel-timer org-mobile-sync-timer))
-  (org-mobile-sync-enable))
+  ;; (org-mobile-sync-enable)
+  )
 
 
 ;;------------------------------------------------------------------------------
@@ -445,11 +447,14 @@
                     company-select-previous
                     company-complete-selection
                     company-complete-number)))
+  ;; (add-hook 'after-init-hook 'global-company-mode)
   :config
   (use-package company-statistics
               :ensure t
               :init
               (company-statistics-mode))
+  (setq company-idle-delay 0)
+  (setq company-show-numbers "on")
   (add-hook 'prog-mode-hook 'company-mode))
 
 (use-package helm-company
@@ -687,7 +692,9 @@
 
 (use-package scala-mode
   :interpreter
-  ("scala" . scala-mode))
+  ("scala" . scala-mode)
+  :config
+  (add-hook 'scala-mode-hook 'ensime-scala-mode-hook))
 
 (use-package sbt-mode
   :commands sbt-start sbt-command
@@ -894,6 +901,11 @@
 (add-to-list 'safe-local-variable-values '(nxml-attribute-indent . 4))
 
 (setq confirm-kill-emacs 'y-or-n-p)
+
+;; (setq make-backup-files nil)            ; stop creating backup~ files
+;; backup in one place. flat, no tree structure
+(setq backup-directory-alist '(("" . "~/.emacs.d/emacs-backup")))
+(setq auto-save-default nil)          ; stop creating #autosave# files
 
 
 ;;----------------------------------------------------------------------------
