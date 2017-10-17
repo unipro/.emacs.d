@@ -735,26 +735,29 @@
 ;;----------------------------------------------------------------------------
 ;; Python
 ;;----------------------------------------------------------------------------
+(use-package python
+  :mode ("\\.py\\'" . python-mode)
+        ("\\.wsgi$" . python-mode)
+  :interpreter ("python" . python-mode)
 
-;; (use-package elpy
-;;   :ensure t
-;;   :config
-;;   (elpy-enable)
-;;   (setq elpy-rpc-python-command "python3")
-;;   (setq elpy-rpc-backend "jedi")
-;;   (elpy-use-cpython (or (executable-find "python3")
-;;                         (executable-find "/usr/bin/python3")
-;;                         (executable-find "/usr/local/bin/python3")
-;;                         "python3"))
-;;   (elpy-use-ipython)
-;;   (setq python-shell-interpreter-args "--simple-prompt -i")
-;;   (add-hook 'python-mode-hook (lambda ()
-;;                               (setq indent-tabs-mode nil)
-;;                               ;; (helm-gtags-mode 1)
-;;                               )))
+  :init
+  (setq-default indent-tabs-mode nil)
 
-;; (use-package ein
-;;   :ensure t)
+  :config
+  (setq python-indent-offset 4))
+
+(use-package anaconda-mode
+  :ensure t
+  :diminish anaconda-mode
+  :init (progn
+          (add-hook 'python-mode-hook #'anaconda-mode)
+          (add-hook 'python-mode-hook #'anaconda-eldoc-mode)))
+
+(use-package company-anaconda
+  :ensure t
+  :commands (company-anaconda)
+  :after company
+  :init (add-to-list 'company-backends #'company-anaconda))
 
 
 ;;----------------------------------------------------------------------------
