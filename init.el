@@ -231,9 +231,9 @@
           ((member "NanumGothicCoding" (font-family-list))
            (set-fontset-font fontset 'hangul
                              '("NanumGothicCoding" . "unicode-bmp")))
-          ((member "나눔고딕코딩" (font-family-list))
+          ((member "나눔고딕코딩" (font-family-list))
            (set-fontset-font fontset 'hangul
-                             '("나눔고딕코딩" . "unicode-bmp")))
+                             '("나눔고딕코딩" . "unicode-bmp")))
           ((member "나눔고딕코딩" (font-family-list))
            (set-fontset-font fontset 'hangul
                              '("나눔고딕코딩" . "unicode-bmp")))
