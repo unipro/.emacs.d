@@ -13,6 +13,7 @@
 (defconst *is-a-mac* (eq system-type 'darwin))
 (defconst *is-a-win-nt* (eq system-type 'windows-nt))
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(setq local-file (expand-file-name "local.el" user-emacs-directory))
 (setq gc-cons-threshold (* 128 1024 1024))
 
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -238,8 +239,7 @@
            (set-fontset-font fontset 'hangul
                              '("나눔고딕코딩" . "unicode-bmp")))
           (t
-           (message "'D2Coding' or 'NanumGothicCoding' are not installed"))))
-  (set-face-attribute 'default nil :height 100))
+           (message "'D2Coding' or 'NanumGothicCoding' are not installed")))))
 
 (use-package color-theme-sanityinc-solarized
   :ensure t
@@ -926,6 +926,12 @@
 (require 'server)
 (unless (server-running-p)
   (server-start))
+
+;;----------------------------------------------------------------------------
+;; Local configuration not shared by git
+;;----------------------------------------------------------------------------
+(when (file-exists-p local-file)
+  (load local-file))
 
 ;;----------------------------------------------------------------------------
 ;; Variables configured via the interactive 'customize' interface
