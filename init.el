@@ -262,7 +262,7 @@
   :ensure t
   :diminish flycheck-mode
   :commands flycheck-mode
-  ;; :init (global-flycheck-mode)
+  :init (global-flycheck-mode)
   :config
   (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled)
         flycheck-idle-change-delay 5.0))
@@ -284,6 +284,24 @@
   :ensure t
   :diminish whitespace-cleanup-mode
   :init (global-whitespace-cleanup-mode))
+
+
+;;----------------------------------------------------------------------------
+;; projectile
+;;----------------------------------------------------------------------------
+(use-package projectile
+  :ensure t
+  :diminish projectile-mode
+  :config
+  (setq projectile-enable-caching t
+        projectile-indexing-method 'alien
+        projectile-completion-system 'helm
+        projectile-switch-project-action 'helm-projectile)
+  ;; https://github.com/bbatsov/projectile/issues/1183
+  (setq projectile-mode-line
+        '(:eval (format " Projectile[%s]"
+                        (projectile-project-name))))
+  (projectile-global-mode))
 
 
 ;;-----------------------------------------------------------------------------
@@ -321,6 +339,11 @@
   (use-package helm-descbinds
     :ensure t
     :config (helm-descbinds-mode)))
+
+(use-package helm-projectile
+  :ensure t
+  :commands (helm-projectile)
+  :config (helm-projectile-on))
 
 ;;; https://github.com/syohex/emacs-helm-ag
 (use-package helm-ag
@@ -419,24 +442,6 @@
     (cancel-timer org-mobile-sync-timer))
   ;; (org-mobile-sync-enable)
   )
-
-
-;;----------------------------------------------------------------------------
-;; projectile
-;;----------------------------------------------------------------------------
-(use-package projectile
-  :ensure t
-  :diminish projectile-mode
-  :config
-  (setq projectile-enable-caching t
-        projectile-completion-system 'helm
-        projectile-switch-project-action 'helm-projectile)
-  (projectile-global-mode))
-
-(use-package helm-projectile
-  :ensure t
-  :commands (helm-projectile)
-  :config (helm-projectile-on))
 
 
 ;;----------------------------------------------------------------------------
