@@ -755,6 +755,7 @@
 (use-package anaconda-mode
   :ensure t
   :diminish anaconda-mode
+  :defer t
   :init (progn
           (add-hook 'python-mode-hook #'anaconda-mode)
           (add-hook 'python-mode-hook #'anaconda-eldoc-mode)))
@@ -764,6 +765,37 @@
   :commands (company-anaconda)
   :after company
   :init (add-to-list 'company-backends #'company-anaconda))
+
+(use-package nose
+  :commands (nosetests-one
+             nosetests-pdb-one
+             nosetests-all
+             nosetests-pdb-all
+             nosetests-module
+             nosetests-pdb-module
+             nosetests-suite
+             nosetests-pdb-suite)
+  :config
+  (progn
+    (add-to-list 'nose-project-root-files "setup.cfg")
+    (setq nose-use-verbose nil)))
+
+(use-package pytest
+  :commands (pytest-one
+             pytest-pdb-one
+             pytest-all
+             pytest-pdb-all
+             pytest-module
+             pytest-pdb-module)
+  :config (add-to-list 'pytest-project-root-files "setup.cfg"))
+
+(use-package pyenv-mode
+  :if (executable-find "pyenv")
+  :commands (pyenv-mode-versions))
+
+(use-package pyvenv
+  :defer t)
+
 
 
 ;;----------------------------------------------------------------------------
