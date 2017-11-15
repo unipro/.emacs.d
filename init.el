@@ -750,7 +750,23 @@
   (setq-default indent-tabs-mode nil)
 
   :config
-  (setq python-indent-offset 4))
+  (setq python-indent-offset 4)
+  ;; TODO pyvenv
+  (setq flycheck-python-pycompile-executable
+        (or (executable-find "python3")
+            (executable-find "/usr/bin/python3")
+            (executable-find "/usr/local/bin/python3")
+            "python"))
+  (setq flycheck-python-pylint-executable
+        (or (executable-find "pylint3")
+            (executable-find "/usr/bin/pylint3")
+            (executable-find "/usr/local/bin/pylint3")
+            "pyline"))
+  (setq flycheck-python-flake8-executable
+        (or (executable-find "flake8")
+            (executable-find "/usr/bin/flake8")
+            (executable-find "/usr/local/bin/flake8")
+            "flake8")))
 
 (use-package anaconda-mode
   :ensure t
