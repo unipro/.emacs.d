@@ -14,7 +14,14 @@
 (defconst *is-a-win-nt* (eq system-type 'windows-nt))
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (setq local-file (expand-file-name "local.el" user-emacs-directory))
-(setq gc-cons-threshold (* 128 1024 1024))
+
+(defun gc-disable ()
+  (setq gc-cons-threshold most-positive-fixnum))
+(defun gc-enable ()
+  (setq gc-cons-threshold 800000))
+(add-hook 'minibuffer-setup-hook #'gc-disable)
+(add-hook 'minibuffer-exit-hook #'gc-enable)
+(gc-enable)
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
