@@ -75,22 +75,26 @@
 ;;----------------------------------------------------------------------------
 ;; Locale, environment
 ;;----------------------------------------------------------------------------
+(require 'ucs-normalize)
 (set-language-environment "UTF-8")
+(prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
-(cond (*is-a-mac*
-       (setq-default coding-system-for-read 'utf-8-hfs)
-       (set-file-name-coding-system 'utf-8-hfs))
-      (t
-       (setq-default coding-system-for-read 'utf-8)
-       (set-file-name-coding-system 'utf-8)))
+(set-keyboard-coding-system 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(setq-default buffer-file-coding-system 'utf-8)
+(setq-default coding-system-for-read 'utf-8)
+(setq-default coding-system-for-write 'utf-8)
 (cond (*is-a-win-nt*
        (set-clipboard-coding-system 'utf-16-le)
        (set-selection-coding-system 'utf-16-le))
+      (*is-a-mac*
+       (set-clipboard-coding-system 'utf-8-hfs)
+       (set-selection-coding-system 'utf-8-hfs)
+       (set-file-name-coding-system 'utf-8-hfs)
+       (setq default-process-coding-system '(utf-8-hfs . utf-8-hfs)))
       (t
-       (set-selection-coding-system 'utf-8)))
-(set-keyboard-coding-system 'utf-8-unix)
-(set-terminal-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
+       (setq x-select-request-type
+             '(UTF8_STRING COMPOUND_TEXT TEXT STRING))))
 (setq default-input-method "korean-hangul")
 (global-set-key (kbd "S-SPC") 'toggle-input-method)
 
