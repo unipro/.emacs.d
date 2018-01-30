@@ -966,6 +966,8 @@
 ;; Terraform
 ;;----------------------------------------------------------------------------
 (use-package terraform-mode
+  :init (use-package company-terraform
+          :init (company-terraform-init))
   :config (setq terraform-indent-level 4))
 
 
