@@ -543,6 +543,14 @@
 
 
 ;;----------------------------------------------------------------------------
+;; highlight-indent-guides
+;;----------------------------------------------------------------------------
+(use-package highlight-indent-guides
+  :ensure t
+  :config (setq highlight-indent-guides-method 'column))
+
+
+;;----------------------------------------------------------------------------
 ;; doxygen
 ;;----------------------------------------------------------------------------
 (autoload 'doxygen-insert-function-comment
@@ -760,6 +768,7 @@
 
   :init
   (setq-default indent-tabs-mode nil)
+  (add-hook 'python-mode-hook #'highlight-indent-guides-mode)
 
   :config
   (setq python-indent-offset 4)
@@ -831,8 +840,7 @@
 ;;----------------------------------------------------------------------------
 (use-package web-mode
   :ensure t
-  :mode (("\\.html\\'" . web-mode)
-         ("\\.php\\'" . web-mode)))
+  :mode ("\\.html\\'" "\\.php\\'"))
 
 
 ;;----------------------------------------------------------------------------
@@ -897,10 +905,7 @@
 ;; nxml
 ;;----------------------------------------------------------------------------
 (use-package nxml-mode
-  :mode (("\\.xml$" . nxml-mode)
-         ("\\.mpd$" . nxml-mode)
-         ("\\.isml?$" . nxml-mode)
-         ("\\.smil$" . nxml-mode))
+  :mode ("\\.xml$" "\\.mpd$" "\\.isml?$" "\\.smil$")
   :init (add-to-list 'magic-mode-alist '("<\\?xml " . nxml-mode))
   :config
   (defun nxml-pretty-print (begin end)
@@ -922,14 +927,17 @@
 ;;----------------------------------------------------------------------------
 (use-package opencl-mode
   :ensure t
-  :mode (("\\.cl$" . opencl-mode)))
+  :mode "\\.cl$")
 
 
 ;;----------------------------------------------------------------------------
 ;; YAML
 ;;----------------------------------------------------------------------------
 (use-package yaml-mode
-  :ensure t)
+  :ensure t
+  :mode ("\\.yml$" "\\.yaml$" "\\.sls$")
+  :init
+  (add-hook 'yaml-mode-hook #'highlight-indent-guides-mode))
 
 
 ;;----------------------------------------------------------------------------
