@@ -551,11 +551,11 @@
   :config
   (setq highlight-indent-guides-method 'column)
 
-  (if (display-graphic-p)
+  (when (not (display-graphic-p))
       (setq highlight-indent-guides-auto-enabled nil)
-    (set-face-background 'highlight-indent-guides-odd-face "darkgray")
-    (set-face-background 'highlight-indent-guides-even-face "dimgray")
-    (set-face-foreground 'highlight-indent-guides-character-face "dimgray")))
+      (set-face-background 'highlight-indent-guides-odd-face "darkgray")
+      (set-face-background 'highlight-indent-guides-even-face "dimgray")
+      (set-face-foreground 'highlight-indent-guides-character-face "dimgray")))
 
 
 ;;----------------------------------------------------------------------------
@@ -779,23 +779,7 @@
   (add-hook 'python-mode-hook #'highlight-indent-guides-mode)
 
   :config
-  (setq python-indent-offset 4)
-  ;; TODO pyvenv
-  (setq flycheck-python-pycompile-executable
-        (or (executable-find "python3")
-            (executable-find "/usr/bin/python3")
-            (executable-find "/usr/local/bin/python3")
-            "python"))
-  (setq flycheck-python-pylint-executable
-        (or (executable-find "pylint3")
-            (executable-find "/usr/bin/pylint3")
-            (executable-find "/usr/local/bin/pylint3")
-            "pyline"))
-  (setq flycheck-python-flake8-executable
-        (or (executable-find "flake8")
-            (executable-find "/usr/bin/flake8")
-            (executable-find "/usr/local/bin/flake8")
-            "flake8")))
+  (setq python-indent-offset 4))
 
 (use-package anaconda-mode
   :ensure t
