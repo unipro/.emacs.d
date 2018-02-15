@@ -801,9 +801,9 @@
   :ensure t
   :diminish anaconda-mode
   :defer t
-  :init (progn
-          (add-hook 'python-mode-hook #'anaconda-mode)
-          (add-hook 'python-mode-hook #'anaconda-eldoc-mode)))
+  :init
+  (add-hook 'python-mode-hook #'anaconda-mode)
+  (add-hook 'python-mode-hook #'anaconda-eldoc-mode))
 
 (use-package company-anaconda
   :ensure t
@@ -821,9 +821,8 @@
              nosetests-suite
              nosetests-pdb-suite)
   :config
-  (progn
-    (add-to-list 'nose-project-root-files "setup.cfg")
-    (setq nose-use-verbose nil)))
+  (add-to-list 'nose-project-root-files "setup.cfg")
+  (setq nose-use-verbose nil))
 
 (use-package pytest
   :commands (pytest-one
