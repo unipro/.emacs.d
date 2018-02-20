@@ -778,6 +778,21 @@
   (setq-default indent-tabs-mode nil)
   (add-hook 'python-mode-hook #'highlight-indent-guides-mode)
 
+  ;; electric-pair-mode and python triple quotes
+  (defun python-electric-pair-string-delimiter ()
+    (when (and electric-pair-mode
+               (memq last-command-event '(?\" ?\'))
+               (let ((count 0))
+                 (while (eq (char-before (- (point) count)) last-command-event)
+                   (setq count (1+ count)))
+                 (= count 3)))
+      (save-excursion (insert (make-string 3 last-command-event)))))
+
+  (add-hook 'python-mode-hook
+            (lambda ()
+              (add-hook 'post-self-insert-hook
+                        #'python-electric-pair-string-delimiter 'append t)))
+
   :config
   (setq python-indent-offset 4))
 
