@@ -637,10 +637,19 @@
   :bind ("C-x C-a C-g" . gud-run)
   :init (add-hook 'gud-mode-hook #'gud-tooltip-mode))
 
+;; (use-package realgud
+;;   :ensure t)
+
 
 ;;----------------------------------------------------------------------------
 ;; Java
 ;;----------------------------------------------------------------------------
+(use-package meghanada
+  :ensure t
+  :init
+  (setq meghanada-auto-start nil)
+  (add-hook 'java-mode-hook #'meghanada-mode)
+  (bind-key "C-c M-." 'meghanada-jump-declaration java-mode-map))
 
 
 ;;----------------------------------------------------------------------------
