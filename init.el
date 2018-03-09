@@ -644,11 +644,25 @@
 ;;----------------------------------------------------------------------------
 ;; Java
 ;;----------------------------------------------------------------------------
+(use-package groovy-mode
+  :ensure t)
+
+(use-package gradle-mode
+  :ensure t)
+
 (use-package meghanada
   :ensure t
+  :commands (meghanada-mode)
   :init
   (setq meghanada-auto-start nil)
-  (add-hook 'java-mode-hook #'meghanada-mode)
+  (setq meghanada-javac-xlint "-Xlint:all,-processing")
+  (add-hook 'java-mode-hook
+            (lambda ()
+              (meghanada-mode t)
+              (gradle-mode t)))
+  (add-hook 'groovy-mode-hook
+            (lambda ()
+              (gradle-mode t)))
   (bind-key "C-c M-." 'meghanada-jump-declaration java-mode-map))
 
 
