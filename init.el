@@ -575,7 +575,7 @@
 ;; C/C++
 ;;----------------------------------------------------------------------------
 (when *is-a-win-nt*
-  (setq compile-command "mingw32-make"))
+  (setq compile-command "mingw32-make -f Makefile.mingw"))
 
 (use-package cc-mode
   :init
