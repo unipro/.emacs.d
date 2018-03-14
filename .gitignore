@@ -1,5 +1,18 @@
-# Compiled
 *.elc
-
-# Packaging
+*~
 .cask
+.org-id-locations
+anaconda-mode/
+company-statistics-cache.el
+custom.el
+elpa/
+ensime/
+eshell/
+helm-doc.org
+ido.last
+local.el
+meghanada/
+projectile-bookmarks.eld
+projectile.cache
+recentf
+tramp
