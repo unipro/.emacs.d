@@ -577,6 +577,12 @@
 (when *is-a-win-nt*
   (setq compile-command "mingw32-make -f Makefile.mingw"))
 
+(use-package cmake-mode
+  :ensure t)
+
+(use-package company-cmake
+  :after company)
+
 (use-package cc-mode
   :init
   (use-package company-c-headers
