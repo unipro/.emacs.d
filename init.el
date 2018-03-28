@@ -204,10 +204,10 @@
 
 (use-package windmove
   :ensure t
-  :bind (("C-c C-j" . windmove-left)
-         ("C-c C-l" . windmove-right)
-         ("C-c C-i" . windmove-up)
-         ("C-c C-k" . windmove-down))
+  :bind (("C-c j" . windmove-left)
+         ("C-c l" . windmove-right)
+         ("C-c i" . windmove-up)
+         ("C-c k" . windmove-down))
   :init
   (windmove-default-keybindings)
   (setq shift-select-mode nil
