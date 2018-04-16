@@ -1,3 +1,4 @@
+;; -*- coding: utf-8; -*-
 ;;; init.el -- My personal emacs settings
 
 ;;; Commentary:
@@ -14,6 +15,7 @@
 (defconst *is-a-win-nt* (eq system-type 'windows-nt))
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (setq local-file (expand-file-name "local.el" user-emacs-directory))
+(setq abbrev-file (expand-file-name "abbrev.el" user-emacs-directory))
 
 (defun gc-disable ()
   (setq gc-cons-threshold most-positive-fixnum))
@@ -828,6 +830,9 @@
   :config
   (setq python-indent-offset 4))
 
+(use-package cython
+  :ensure t)
+
 (use-package anaconda-mode
   :ensure t
   :diminish anaconda-mode
@@ -1053,6 +1058,12 @@
 (require 'server)
 (unless (server-running-p)
   (server-start))
+
+;;----------------------------------------------------------------------------
+;; Abbrev
+;;----------------------------------------------------------------------------
+(when (file-exists-p abbrev-file)
+  (load abbrev-file))
 
 ;;----------------------------------------------------------------------------
 ;; Local configuration not shared by git
