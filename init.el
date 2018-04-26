@@ -830,7 +830,7 @@
   :config
   (setq python-indent-offset 4))
 
-(use-package cython
+(use-package cython-mode
   :ensure t)
 
 (use-package anaconda-mode
