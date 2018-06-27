@@ -84,17 +84,19 @@
 (set-keyboard-coding-system 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (setq-default buffer-file-coding-system 'utf-8)
-(setq-default coding-system-for-read 'utf-8)
 (setq-default coding-system-for-write 'utf-8)
 (cond (*is-a-win-nt*
+       (setq-default coding-system-for-read 'utf-8) ; XXX 'utf-16-le
        (set-clipboard-coding-system 'utf-16-le)
        (set-selection-coding-system 'utf-16-le))
       (*is-a-mac*
+       (setq-default coding-system-for-read 'utf-8-hfs)
        (set-clipboard-coding-system 'utf-8-hfs)
        (set-selection-coding-system 'utf-8-hfs)
        (set-file-name-coding-system 'utf-8-hfs)
        (setq default-process-coding-system '(utf-8-hfs . utf-8-hfs)))
-      (t
+      (t  ; linux
+       (setq-default coding-system-for-read 'utf-8)
        (setq x-select-request-type
              '(UTF8_STRING COMPOUND_TEXT TEXT STRING))))
 (setq default-input-method "korean-hangul")
@@ -248,9 +250,9 @@
           ((member "나눔고딕코딩" (font-family-list))
            (set-fontset-font fontset 'hangul
                              '("나눔고딕코딩" . "unicode-bmp")))
-          ((member "나눔고딕코딩" (font-family-list))
+          ((member "나눔고딕코딩" (font-family-list))
            (set-fontset-font fontset 'hangul
-                             '("나눔고딕코딩" . "unicode-bmp")))
+                             '("나눔고딕코딩" . "unicode-bmp")))
           (t
            (message "'D2Coding' or 'NanumGothicCoding' are not installed")))))
 
@@ -385,14 +387,14 @@
 ;;----------------------------------------------------------------------------
 ;; Subversion
 ;;----------------------------------------------------------------------------
-(use-package psvn
-  :ensure t
-  ;; :pin melpa
-  :commands (svn-status svn-examine projectile-vc)
-  :config
-  (setq svn-status-hide-unmodified t
-        svn-status-hide-unknown t
-        svn-status-svn-file-coding-system 'utf-8))
+;; (use-package psvn
+;;   :ensure t
+;;   ;; :pin melpa
+;;   :commands (svn-status svn-examine projectile-vc)
+;;   :config
+;;   (setq svn-status-hide-unmodified t
+;;         svn-status-hide-unknown t
+;;         svn-status-svn-file-coding-system 'utf-8))
 
 
 ;;----------------------------------------------------------------------------
@@ -876,7 +878,6 @@
 (use-package pyvenv
   :defer t)
 
-
 
 ;;----------------------------------------------------------------------------
 ;; HTML
@@ -1010,6 +1011,7 @@
 ;; HCL
 ;;----------------------------------------------------------------------------
 (use-package hcl-mode
+  :ensure t
   :config (setq hcl-indent-level 4))
 
 
@@ -1017,9 +1019,12 @@
 ;; Terraform
 ;;----------------------------------------------------------------------------
 (use-package terraform-mode
-  :init (use-package company-terraform
-          :init (company-terraform-init))
+  :ensure t
   :config (setq terraform-indent-level 4))
+
+(use-package company-terraform
+  :ensure t
+  :init (company-terraform-init))
 
 
 ;;----------------------------------------------------------------------------
