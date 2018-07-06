@@ -952,6 +952,11 @@
   :mode ("\\.xml$" "\\.mpd$" "\\.isml?$" "\\.smil$")
   :init (add-to-list 'magic-mode-alist '("<\\?xml " . nxml-mode))
   :config
+  (add-hook 'nxml-mode-hook
+            (lambda ()
+              (setq indent-tabs-mode t)
+              (setq nxml-child-indent 8
+                    nxml-attribute-indent 8)))
   (defun nxml-pretty-print (begin end)
     "Pretty-print selected region."
     (interactive "r")
