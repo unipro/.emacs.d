@@ -556,10 +556,10 @@
   (setq highlight-indent-guides-method 'column)
 
   (when (not (display-graphic-p))
-      (setq highlight-indent-guides-auto-enabled nil)
-      (set-face-background 'highlight-indent-guides-odd-face "darkgray")
-      (set-face-background 'highlight-indent-guides-even-face "dimgray")
-      (set-face-foreground 'highlight-indent-guides-character-face "dimgray")))
+    (setq highlight-indent-guides-auto-enabled nil)
+    (set-face-background 'highlight-indent-guides-odd-face "darkkhaki")
+    (set-face-background 'highlight-indent-guides-even-face "khaki")
+    (set-face-foreground 'highlight-indent-guides-character-face "khaki")))
 
 
 ;;----------------------------------------------------------------------------
