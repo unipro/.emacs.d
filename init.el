@@ -271,6 +271,15 @@
 
 
 ;;----------------------------------------------------------------------------
+;; diff, ediff
+;;----------------------------------------------------------------------------
+(use-package ediff
+  :config
+  (setq ediff-split-window-function 'split-window-horizontally
+        ediff-window-setup-function 'ediff-setup-windows-plain))
+
+
+;;----------------------------------------------------------------------------
 ;; flycheck, flyspell, etc
 ;;----------------------------------------------------------------------------
 (use-package flycheck
@@ -1051,8 +1060,9 @@
              '(eval add-to-list 'c-offsets-alist '(case-label . +)))
 (add-to-list 'safe-local-variable-values
              '(eval (add-to-list 'c-offsets-alist '(case-label . +))))
-(add-to-list 'safe-local-variable-values '(nxml-child-indent . 4))
-(add-to-list 'safe-local-variable-values '(nxml-attribute-indent . 4))
+
+(use-package ediff
+  )
 
 (setq confirm-kill-emacs 'y-or-n-p)
 
