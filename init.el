@@ -69,6 +69,7 @@
   ;; (setq mac-command-modifier 'meta)
   ;; (setq mac-option-modifier 'none)
   (use-package exec-path-from-shell
+    :ensure t
     :config
     (exec-path-from-shell-initialize)
     (exec-path-from-shell-copy-env "PATH")))
