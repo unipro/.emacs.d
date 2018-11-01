@@ -643,7 +643,8 @@
                            (setq c-basic-offset 4)))
   (add-hook 'c++-mode-hook (lambda ()
                              (c-set-style "Stroustrup")
-                             (setq flycheck-gcc-language-standard "c++11"))))
+                             (cond (*is-a-mac* (setq flycheck-clang-language-standard "c++11"))
+                                   (t (setq flycheck-gcc-language-standard "c++11"))))))
 
 
 ;;----------------------------------------------------------------------------
