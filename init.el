@@ -131,7 +131,7 @@
               (setq-default dired-omit-files-p t)
               (setq dired-omit-files "^\\.?#\\|^\\.$\\|^\\.\\.$\\|^\\..+$")))
 
-(use-package ido-mode
+(use-package ido
   :init (ido-mode t)
   :config
   (setq ido-everywhere t
@@ -182,12 +182,11 @@
 (setq-default indent-tabs-mode nil)
 
 (show-paren-mode 1)
-(use-package electric-pair
-  :init (electric-pair-mode t))
+(electric-pair-mode t)
 
 ;; (setq-default indicate-empty-lines t)
 
-(use-package page-break-lines-mode
+(use-package page-break-lines
   :ensure page-break-lines
   :diminish page-break-lines-mode
   :init (global-page-break-lines-mode))
@@ -1083,12 +1082,10 @@
 ;;----------------------------------------------------------------------------
 ;; sr-speedbar
 ;;----------------------------------------------------------------------------
-(use-package sr-speedbar
-  :init
-  (setq sr-speedbar-auto-refresh nil)
-  ;; (setq speedbar-show-unknown-files t)
-  ;; (setq speedbar-use-images nil)
-  (setq sr-speedbar-right-side nil))
+(setq sr-speedbar-auto-refresh nil)
+;; (setq speedbar-show-unknown-files t)
+;; (setq speedbar-use-images nil)
+(setq sr-speedbar-right-side nil)
 
 
 ;;----------------------------------------------------------------------------
