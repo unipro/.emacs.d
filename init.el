@@ -680,6 +680,7 @@
     (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
 
 (use-package racer
+  :ensure t
   :commands racer-mode
   ;; :hook
   ;; ((rust-mode . racer-mode)
@@ -691,11 +692,13 @@
          ("M-." . racer-find-definition))
   :config
   (use-package company-racer
+    :ensure t
     :config
     (add-to-list 'company-backends 'company-racer)
     (setq company-tooltip-align-annotations t)))
 
 (use-package cargo
+  :ensure t
   :commands cargo-minor-mode
   ;; :hook (rust-mode . cargo-minor-mode)
   :init
