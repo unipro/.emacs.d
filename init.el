@@ -673,6 +673,7 @@
   :config
   (setq rust-format-on-save t)
   (use-package flycheck-rust
+    :ensure t
     :after flycheck
     :commands flycheck-rust-setup
     :init
@@ -778,11 +779,13 @@
 ;;----------------------------------------------------------------------------
 (use-package clojure-mode
   :ensure t
-  ;; :init
-  ;; (use-package flycheck-clojure
-  ;;   :ensure t
-  ;;   :config (flycheck-clojure-setup))
   :config
+  (use-package flycheck-clojure
+    :ensure t
+    :after flycheck
+    :commands flycheck-clojure-setup
+    :init
+    (add-hook 'flycheck-mode-hook #'flycheck-clojure-setup))
   (add-hook 'clojure-mode-hook (lambda ()
                                  (setq indent-tabs-mode nil)
 
