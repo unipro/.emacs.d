@@ -688,6 +688,7 @@
   :init
   (add-hook 'rust-mode-hook 'racer-mode)
   (add-hook 'racer-mode-hook 'eldoc-mode)
+  (setq racer-rust-src-path (shell-command-to-string "echo -n `rustc --print sysroot`/lib/rustlib/src/rust/src"))
   :bind (:map rust-mode-map
          ("M-." . racer-find-definition))
   :config
