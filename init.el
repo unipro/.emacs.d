@@ -55,8 +55,8 @@
 
 (eval-when-compile
   (require 'use-package))
-(require 'diminish) ;; if you use :diminish
 (require 'bind-key) ;; if you use any :bind variant
+(use-package diminish :ensure t) ;; if you use :diminish
 
 ;; ignore the signature checks
 (setq package-check-signature nil)
