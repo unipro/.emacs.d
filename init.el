@@ -256,18 +256,14 @@
           (t
            (message "'D2Coding' or 'NanumGothicCoding' are not installed")))))
 
-(use-package color-theme-sanityinc-solarized
+(use-package zenburn-theme
   :ensure t
-  :commands (color-theme-sanityinc-solarized-dark
-             color-theme-sanityinc-solarized-light)
   :if (display-graphic-p)
   :init
-  (setq custom-enabled-themes '(sanityinc-solarized-light))
+  (setq custom-enabled-themes '(zenburn))
   (setq custom-safe-themes
-        '("4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4"
-          "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328"
-          default))
-  (color-theme-sanityinc-solarized-light))
+        '("84890723510d225c45aaff941a7e201606a48b973f0121cb9bcb0b9399be8cba"
+          default)))
 
 
 ;;----------------------------------------------------------------------------
