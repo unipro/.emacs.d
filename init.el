@@ -667,7 +667,7 @@
   :ensure t
   :mode "\\.rs\\'"
   :config
-  (setq rust-format-on-save t)
+  (setq rust-format-on-save nil)
   (use-package flycheck-rust
     :ensure t
     :after flycheck
