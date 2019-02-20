@@ -587,7 +587,9 @@
   (setq compile-command "mingw32-make -f Makefile.mingw"))
 
 (use-package cmake-mode
-  :ensure t)
+  :ensure t
+  :config
+  (setq cmake-tab-width 4))
 
 (use-package company-cmake
   :after company)
