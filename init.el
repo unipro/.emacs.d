@@ -1112,7 +1112,8 @@
 (use-package ediff
   )
 
-(setq confirm-kill-emacs 'y-or-n-p)
+(when (daemonp)
+  (setq confirm-kill-emacs 'y-or-n-p))
 
 ;; (setq make-backup-files nil)            ; stop creating backup~ files
 ;; backup in one place. flat, no tree structure
