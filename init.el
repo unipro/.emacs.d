@@ -14,6 +14,7 @@
 (defconst *is-a-mac* (eq system-type 'darwin))
 (defconst *is-a-win-nt* (eq system-type 'windows-nt))
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(setq server-file (expand-file-name "server.el" user-emacs-directory))
 (setq local-file (expand-file-name "local.el" user-emacs-directory))
 (setq abbrev-file (expand-file-name "abbrev.el" user-emacs-directory))
 
@@ -73,6 +74,23 @@
     :config
     (exec-path-from-shell-initialize)
     (exec-path-from-shell-copy-env "PATH")))
+
+
+;;----------------------------------------------------------------------------
+;; Allow access from emacsclient
+;;----------------------------------------------------------------------------
+
+;; Server configuration not shared by git
+(when (file-exists-p server-file)
+  (load server-file))
+
+
+(unless (daemonp)
+  (setq confirm-kill-emacs 'y-or-n-p))
+
+(require 'server)
+(unless (server-running-p)
+  (server-start))
 
 
 ;;----------------------------------------------------------------------------
@@ -1112,22 +1130,12 @@
 (use-package ediff
   )
 
-(unless (daemonp)
-  (setq confirm-kill-emacs 'y-or-n-p))
-
 ;; (setq make-backup-files nil)            ; stop creating backup~ files
 ;; backup in one place. flat, no tree structure
 (setq backup-directory-alist '(("" . "~/.emacs.d/emacs-backup")))
 (setq auto-save-default nil)          ; stop creating #autosave# files
 
 
-;;----------------------------------------------------------------------------
-;; Allow access from emacsclient
-;;----------------------------------------------------------------------------
-(require 'server)
-(unless (server-running-p)
-  (server-start))
-
 ;;----------------------------------------------------------------------------
 ;; Abbrev
 ;;----------------------------------------------------------------------------
