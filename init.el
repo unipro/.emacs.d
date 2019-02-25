@@ -62,6 +62,10 @@
 ;; ignore the signature checks
 (setq package-check-signature nil)
 
+;; Confirm before exit
+(unless (daemonp)
+  (setq confirm-kill-emacs 'y-or-n-p))
+
 
 ;;----------------------------------------------------------------------------
 ;; macOS key bindings
@@ -74,23 +78,6 @@
     :config
     (exec-path-from-shell-initialize)
     (exec-path-from-shell-copy-env "PATH")))
-
-
-;;----------------------------------------------------------------------------
-;; Allow access from emacsclient
-;;----------------------------------------------------------------------------
-
-;; Server configuration not shared by git
-(when (file-exists-p server-file)
-  (load server-file))
-
-
-(unless (daemonp)
-  (setq confirm-kill-emacs 'y-or-n-p))
-
-(require 'server)
-(unless (server-running-p)
-  (server-start))
 
 
 ;;----------------------------------------------------------------------------
@@ -1153,6 +1140,17 @@
 ;;----------------------------------------------------------------------------
 (when (file-exists-p custom-file)
   (load custom-file))
+
+;;----------------------------------------------------------------------------
+;; Allow access from emacsclient
+;;----------------------------------------------------------------------------
+
+(when (file-exists-p server-file)
+  (load server-file))
+
+(require 'server)
+(unless (server-running-p)
+  (server-start))
 
 (provide 'init)
 ;;; init.el ends here
