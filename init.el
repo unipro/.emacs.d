@@ -13,14 +13,17 @@
 ;;----------------------------------------------------------------------------
 (defconst *is-a-mac* (eq system-type 'darwin))
 (defconst *is-a-win-nt* (eq system-type 'windows-nt))
+(defconst env-file (expand-file-name "env.el" user-emacs-directory))
+(defconst local-file (expand-file-name "local.el" user-emacs-directory))
+(defconst abbrev-file (expand-file-name "abbrev.el" user-emacs-directory))
+
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(setq server-file (expand-file-name "server.el" user-emacs-directory))
-(setq local-file (expand-file-name "local.el" user-emacs-directory))
-(setq abbrev-file (expand-file-name "abbrev.el" user-emacs-directory))
 
 (defun gc-disable ()
+  "Disable automatic garbage collection."
   (setq gc-cons-threshold most-positive-fixnum))
 (defun gc-enable ()
+  "Enable automatic garbage collection."
   (setq gc-cons-threshold 800000))
 (add-hook 'minibuffer-setup-hook #'gc-disable)
 (add-hook 'minibuffer-exit-hook #'gc-enable)
@@ -62,9 +65,27 @@
 ;; ignore the signature checks
 (setq package-check-signature nil)
 
+(when (file-exists-p env-file)
+  (load env-file))
+
 ;; Confirm before exit
 (unless (daemonp)
   (setq confirm-kill-emacs 'y-or-n-p))
+
+;; exec-path, PATH
+(defun add-to-path (path)
+  "Add the path directory to the `exec-path' and `PATH' variables."
+  (when (file-directory-p path)
+    (let ((path-env (getenv "PATH")))
+        (when (not (cl-search path path-env))
+       (setenv "PATH" (concat path ":" path-env))))
+    (add-to-list 'exec-path path)))
+
+(defconst home-bin-path (expand-file-name "bin" "~"))
+(defconst home-local-bin-path (expand-file-name ".local/bin" "~"))
+
+(add-to-path home-bin-path)
+(add-to-path home-local-bin-path)
 
 
 ;;----------------------------------------------------------------------------
@@ -706,7 +727,8 @@
   :commands cargo-minor-mode
   ;; :hook (rust-mode . cargo-minor-mode)
   :init
-  (add-hook 'rust-mode-hook 'cargo-minor-mode))
+  (add-hook 'rust-mode-hook 'cargo-minor-mode)
+  (add-to-path (expand-file-name ".cargo/bin" "~")))
 
 
 ;;----------------------------------------------------------------------------
@@ -1144,9 +1166,6 @@
 ;;----------------------------------------------------------------------------
 ;; Allow access from emacsclient
 ;;----------------------------------------------------------------------------
-
-(when (file-exists-p server-file)
-  (load server-file))
 
 (require 'server)
 (unless (server-running-p)
