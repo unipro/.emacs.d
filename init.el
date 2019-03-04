@@ -691,6 +691,8 @@
 ;;----------------------------------------------------------------------------
 ;; Rust
 ;;----------------------------------------------------------------------------
+(add-to-path (expand-file-name ".cargo/bin" "~"))
+
 (use-package rust-mode
   :ensure t
   :mode "\\.rs\\'"
@@ -727,8 +729,7 @@
   :commands cargo-minor-mode
   ;; :hook (rust-mode . cargo-minor-mode)
   :init
-  (add-hook 'rust-mode-hook 'cargo-minor-mode)
-  (add-to-path (expand-file-name ".cargo/bin" "~")))
+  (add-hook 'rust-mode-hook 'cargo-minor-mode))
 
 
 ;;----------------------------------------------------------------------------
