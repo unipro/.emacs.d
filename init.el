@@ -687,6 +687,8 @@
 ;; (use-package realgud
 ;;   :ensure t)
 
+(load (expand-file-name "gud-lldb.el" user-emacs-directory))
+
 
 ;;----------------------------------------------------------------------------
 ;; Rust
