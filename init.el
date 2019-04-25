@@ -607,6 +607,24 @@
 
 
 ;;----------------------------------------------------------------------------
+;; Language Server Protocol
+;;----------------------------------------------------------------------------
+(use-package lsp-mode
+  :ensure t
+  :commands lsp
+  :init
+  (add-hook 'rust-mode-hook #'lsp))
+
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode)
+
+(use-package company-lsp
+  :ensure t
+  :commands company-lsp)
+
+
+;;----------------------------------------------------------------------------
 ;; C/C++
 ;;----------------------------------------------------------------------------
 (when *is-a-win-nt*
@@ -707,24 +725,24 @@
     :init
     (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
 
-(use-package racer
-  :ensure t
-  :commands racer-mode
-  ;; :hook
-  ;; ((rust-mode . racer-mode)
-  ;;  (rust-mode . eldoc-mode))
-  :init
-  (add-hook 'rust-mode-hook 'racer-mode)
-  (add-hook 'racer-mode-hook 'eldoc-mode)
-  (setq racer-rust-src-path (shell-command-to-string "echo -n `rustc --print sysroot`/lib/rustlib/src/rust/src"))
-  :bind (:map rust-mode-map
-         ("M-." . racer-find-definition))
-  :config
-  (use-package company-racer
-    :ensure t
-    :config
-    (add-to-list 'company-backends 'company-racer)
-    (setq company-tooltip-align-annotations t)))
+;; (use-package racer
+;;   :ensure t
+;;   :commands racer-mode
+;;   ;; :hook
+;;   ;; ((rust-mode . racer-mode)
+;;   ;;  (rust-mode . eldoc-mode))
+;;   :init
+;;   (add-hook 'rust-mode-hook 'racer-mode)
+;;   (add-hook 'racer-mode-hook 'eldoc-mode)
+;;   (setq racer-rust-src-path (shell-command-to-string "echo -n `rustc --print sysroot`/lib/rustlib/src/rust/src"))
+;;   :bind (:map rust-mode-map
+;;          ("M-." . racer-find-definition))
+;;   :config
+;;   (use-package company-racer
+;;     :ensure t
+;;     :config
+;;     (add-to-list 'company-backends 'company-racer)
+;;     (setq company-tooltip-align-annotations t)))
 
 (use-package cargo
   :ensure t
