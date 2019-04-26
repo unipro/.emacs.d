@@ -749,7 +749,9 @@
   :commands cargo-minor-mode
   ;; :hook (rust-mode . cargo-minor-mode)
   :init
-  (add-hook 'rust-mode-hook 'cargo-minor-mode))
+  (add-hook 'rust-mode-hook 'cargo-minor-mode)
+  (add-hook 'cargo-process-mode-hook (lambda ()
+                                       (setq-local truncate-lines nil))))
 
 
 ;;----------------------------------------------------------------------------
