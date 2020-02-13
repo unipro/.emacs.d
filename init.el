@@ -248,6 +248,11 @@
   :bind (("M-p" . ace-window)
          ("C-x o" . ace-window)))
 
+;; (use-package avy
+;;   :ensure t
+;;   :bind (("C-;" . avy-goto-word-0)
+;;          ("C-'" . avy-goto-line)))
+
 (use-package winner
   :bind (:map winner-mode-map
          ("C-c w u" . winner-undo)
@@ -657,8 +662,9 @@
     ;; :init
     ;; (setq c-eldoc-includes "`pkg-config gtk+-2.0 --cflags` -I./ -I../ ")
     :config
-    (add-hook 'c-mode-hook 'c-turn-on-eldoc-mode)
-    (add-hook 'c++-mode-hook 'c-turn-on-eldoc-mode))
+    ;; (add-hook 'c-mode-hook 'c-turn-on-eldoc-mode)
+    ;; (add-hook 'c++-mode-hook 'c-turn-on-eldoc-mode)
+    )
 
   (add-hook 'c-mode-common-hook
             (lambda ()
@@ -722,11 +728,13 @@
 
 (use-package rust-mode
   :ensure t
+  :pin melpa
   :mode "\\.rs\\'"
   :config
   (setq rust-format-on-save nil)
   (use-package flycheck-rust
     :ensure t
+    :pin melpa
     :after flycheck
     :commands flycheck-rust-setup
     :init
@@ -734,6 +742,7 @@
 
 (use-package racer
   :ensure t
+  :pin melpa
   :commands racer-mode
   ;; :hook
   ;; ((rust-mode . racer-mode)
@@ -747,12 +756,14 @@
   :config
   (use-package company-racer
     :ensure t
+    :pin melpa
     :config
     (add-to-list 'company-backends 'company-racer)
     (setq company-tooltip-align-annotations t)))
 
 (use-package cargo
   :ensure t
+  :pin melpa
   :commands cargo-minor-mode
   ;; :hook (rust-mode . cargo-minor-mode)
   :init
