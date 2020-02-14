@@ -180,6 +180,12 @@
 (use-package whole-line-or-region
   :ensure t)
 
+(use-package ace-jump-mode
+  :ensure t
+  :bind (("C-c SPC" . ace-jump-word-mode)
+         ("C-c C-c" . ace-jump-char-mode)
+         ("C-c C-l" . ace-jump-line-mode)))
+
 (use-package hippie-expand
   :bind (([remap dabbrev-expand] . hippie-expand)))
 
