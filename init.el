@@ -744,7 +744,13 @@
     :after flycheck
     :commands flycheck-rust-setup
     :init
-    (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
+    (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+  (use-package flycheck-inline
+    :ensure t
+    :pin melpa
+    :after flycheck
+    :init
+    (add-hook 'flycheck-mode-hook #'flycheck-inline-mode)))
 
 (use-package racer
   :ensure t
