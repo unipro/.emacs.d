@@ -541,6 +541,12 @@
   :commands (helm-company)
   :config (company-mode))
 
+;; Documentation popups for Company
+(use-package company-quickhelp
+  :ensure t
+  :defer t
+  :init (add-hook 'global-company-mode-hook #'company-quickhelp-mode))
+
 
 ;;----------------------------------------------------------------------------
 ;; yasnippet
@@ -789,6 +795,40 @@
   (add-hook 'rust-mode-hook 'cargo-minor-mode)
   (add-hook 'cargo-process-mode-hook (lambda ()
                                        (setq-local truncate-lines nil))))
+
+
+;;----------------------------------------------------------------------------
+;; Golang
+;;----------------------------------------------------------------------------
+(add-to-path (expand-file-name "go/bin" "~"))
+
+(use-package go-mode
+  :ensure t
+  :mode "\\.go\\'"
+  :bind (("M-," . compile)
+         ("M-." . godef-jump))
+  :config
+  (add-hook 'go-mode-hook
+            (lambda ()
+              (setq tab-width 4)
+              (flycheck-mode)
+              (add-hook 'before-save-hook 'gofmt-before-save)
+              (setq gofmt-command "goimports")
+              (use-package go-guru
+                :config (go-guru-hl-identifier-mode))
+              (use-package company-go
+                :config (set (make-local-variable 'company-backends)
+                             '(company-go))
+                (company-mode))
+              (use-package gotest
+                :bind (("C-c , m" . go-test-current-file)
+                       ("C-c , s" . go-test-current-test)
+                       ("C-c , a" . go-test-current-project)))
+              (use-package go-eldoc
+                :init
+                (add-hook 'go-mode-hook 'go-eldoc-setup)))))
+
+;; TODO go-projectile
 
 
 ;;----------------------------------------------------------------------------
