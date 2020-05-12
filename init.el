@@ -805,14 +805,18 @@
 (use-package go-mode
   :ensure t
   :mode "\\.go\\'"
-  :bind (("M-," . compile)
-         ("M-." . godef-jump))
+  :bind (("M-." . godef-jump)
+         ("M-," . pop-tag-mark))
   :config
   (add-hook 'go-mode-hook
             (lambda ()
               (setq tab-width 4)
               (flycheck-mode)
               (add-hook 'before-save-hook 'gofmt-before-save)
+              ;; Customize compile command to run go build
+              (if (not (string-match "go" compile-command))
+                  (set (make-local-variable 'compile-command)
+                       "go build -v && go test -v && go vet"))
               (setq gofmt-command "goimports")
               (use-package go-guru
                 :config (go-guru-hl-identifier-mode))
