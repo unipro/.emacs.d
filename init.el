@@ -949,6 +949,9 @@ _q_: exit
   :ensure t
   :commands slime
   :init
+  (defconst slime-helper-file (expand-file-name "~/quicklisp/slime-helper.el"))
+  (when (file-exists-p slime-helper-file)
+    (load slime-helper-file))
   (setq inferior-lisp-program (or (executable-find "sbcl")
                                   (executable-find "/usr/bin/sbcl")
                                   (executable-find "/usr/local/bin/sbcl")
