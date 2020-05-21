@@ -1043,9 +1043,22 @@ _q_: exit
 ;;----------------------------------------------------------------------------
 ;; Python
 ;;----------------------------------------------------------------------------
+(use-package elpy
+  :ensure t
+  :init
+  (add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
+  :bind (:map elpy-mode-map
+              ("<M-left>" . nil)
+              ("<M-right>" . nil)
+              ("<M-S-left>" . elpy-nav-indent-shift-left)
+              ("<M-S-right>" . elpy-nav-indent-shift-right)
+              ("M-." . elpy-goto-definition)
+              ("M-," . pop-tag-mark))
+  :config
+  (setq elpy-rpc-backend "jedi"))
+
 (use-package python
-  :mode ("\\.py\\'" . python-mode)
-        ("\\.wsgi$" . python-mode)
+  :mode ("\\.py" . python-mode)
   :interpreter ("python" . python-mode)
 
   :init
@@ -1068,53 +1081,8 @@ _q_: exit
                         #'python-electric-pair-string-delimiter 'append t)))
 
   :config
-  (setq python-indent-offset 4))
-
-(use-package cython-mode
-  :ensure t)
-
-(use-package anaconda-mode
-  :ensure t
-  :diminish anaconda-mode
-  :defer t
-  :init
-  (add-hook 'python-mode-hook #'anaconda-mode)
-  (add-hook 'python-mode-hook #'anaconda-eldoc-mode))
-
-(use-package company-anaconda
-  :ensure t
-  :commands (company-anaconda)
-  :after company
-  :init (add-to-list 'company-backends #'company-anaconda))
-
-(use-package nose
-  :commands (nosetests-one
-             nosetests-pdb-one
-             nosetests-all
-             nosetests-pdb-all
-             nosetests-module
-             nosetests-pdb-module
-             nosetests-suite
-             nosetests-pdb-suite)
-  :config
-  (add-to-list 'nose-project-root-files "setup.cfg")
-  (setq nose-use-verbose nil))
-
-(use-package pytest
-  :commands (pytest-one
-             pytest-pdb-one
-             pytest-all
-             pytest-pdb-all
-             pytest-module
-             pytest-pdb-module)
-  :config (add-to-list 'pytest-project-root-files "setup.cfg"))
-
-(use-package pyenv-mode
-  :if (executable-find "pyenv")
-  :commands (pyenv-mode-versions))
-
-(use-package pyvenv
-  :defer t)
+  (setq python-indent-offset 4)
+  (elpy-enable))
 
 
 ;;----------------------------------------------------------------------------
