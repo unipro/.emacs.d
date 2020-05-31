@@ -1055,7 +1055,8 @@ _q_: exit
               ("M-." . elpy-goto-definition)
               ("M-," . pop-tag-mark))
   :config
-  (setq elpy-rpc-backend "jedi"))
+  (setq elpy-rpc-backend "jedi")
+  (setq elpy-rpc-virtualenv-path 'current))
 
 (use-package python
   :mode ("\\.py" . python-mode)
