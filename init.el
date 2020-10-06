@@ -805,8 +805,9 @@
 (use-package go-mode
   :ensure t
   :mode "\\.go\\'"
-  :bind (("M-." . godef-jump)
-         ("M-," . pop-tag-mark))
+  :bind (:map go-mode-map
+              ("M-." . godef-jump)
+              ("M-," . pop-tag-mark))
   :config
   (add-hook 'go-mode-hook
             (lambda ()
