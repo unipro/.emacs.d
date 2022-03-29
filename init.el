@@ -427,82 +427,6 @@
 
 
 ;;----------------------------------------------------------------------------
-;; Subversion
-;;----------------------------------------------------------------------------
-;; (use-package psvn
-;;   :ensure t
-;;   ;; :pin melpa
-;;   :commands (svn-status svn-examine projectile-vc)
-;;   :config
-;;   (setq svn-status-hide-unmodified t
-;;         svn-status-hide-unknown t
-;;         svn-status-svn-file-coding-system 'utf-8))
-
-
-;;----------------------------------------------------------------------------
-;; org-mode
-;;----------------------------------------------------------------------------
-(use-package org
-  :init
-  (setq org-log-done t
-        org-use-fast-todo-selection t
-        org-todo-keywords '((type "TODO(t)"
-                                  "STARTED(s)"
-                                  "WAITING(w@/!)"
-                                  "|"
-                                  "DONE(d!/!)"
-                                  "CANCELLED(c@/!)"))
-        org-todo-keyword-faces '(("TODO"
-                                  :foreground "red"
-                                  :weight bold)
-                                 ("STARTED"
-                                  :foreground "blue"
-                                  :weight bold)
-                                 ("DONE"
-                                  :foreground "forest green"
-                                  :weight bold)
-                                 ("WAITING"
-                                  :foreground "orange"
-                                  :weight bold)
-                                 ("CANCELLED"
-                                  :foreground "forest green"
-                                  :weight bold))
-        org-directory "~/org"
-        org-default-notes-file (concat org-directory "/refile.org")
-        org-agenda-files `(,(concat org-directory "/work.org"))
-        org-mobile-directory "~/Dropbox/org"
-        org-mobile-inbox-for-pull (concat org-directory "/refile.org")
-        org-mobile-files `(,(concat org-directory "/work.org")))
-  ;; make org mode allow eval of some langs
-  (org-babel-do-load-languages 'org-babel-load-languages
-                               '((emacs-lisp . t)
-                                 (clojure . t)
-                                 (python . t)
-                                 (ruby . t)))
-  :config
-  (add-hook 'org-mode-hook 'company-mode)
-  ;; http://blog.zhengdong.me/2012/06/16/org-my-life/
-  (defvar org-mobile-sync-timer nil)
-  (defvar org-mobile-sync-idle-secs (* 60 10))
-  (defun org-mobile-sync ()
-    (interactive)
-    (org-mobile-pull)
-    (org-mobile-push))
-  (defun org-mobile-sync-enable ()
-    "enable mobile org idle sync"
-    (interactive)
-    (setq org-mobile-sync-timer
-          (run-with-idle-timer org-mobile-sync-idle-secs t
-                               'org-mobile-sync)));
-  (defun org-mobile-sync-disable ()
-    "disable mobile org idle sync"
-    (interactive)
-    (cancel-timer org-mobile-sync-timer))
-  ;; (org-mobile-sync-enable)
-  )
-
-
-;;----------------------------------------------------------------------------
 ;; hydra
 ;;----------------------------------------------------------------------------
 (use-package hydra
@@ -618,37 +542,6 @@
 
 
 ;;----------------------------------------------------------------------------
-;; doxygen
-;;----------------------------------------------------------------------------
-(autoload 'doxygen-insert-function-comment
-  "doxygen" "insert comment for the function at point" t)
-(autoload 'doxygen-insert-file-comment
-  "doxygen" "insert comment for file" t)
-(autoload 'doxygen-insert-member-group-region
-  "doxygen" "insert comment for member group" t)
-(autoload 'doxygen-insert-compound-comment
-  "doxygen" "insert comment for compound" t)
-
-
-;;----------------------------------------------------------------------------
-;; Language Server Protocol
-;;----------------------------------------------------------------------------
-;; (use-package lsp-mode
-;;   :ensure t
-;;   :commands lsp
-;;   :init
-;;   (add-hook 'rust-mode-hook #'lsp))
-
-;; (use-package lsp-ui
-;;   :ensure t
-;;   :commands lsp-ui-mode)
-
-;; (use-package company-lsp
-;;   :ensure t
-;;   :commands company-lsp)
-
-
-;;----------------------------------------------------------------------------
 ;; C/C++
 ;;----------------------------------------------------------------------------
 (when *is-a-win-nt*
@@ -730,316 +623,6 @@
 ;; (use-package realgud
 ;;   :ensure t)
 
-(load (expand-file-name "gud-lldb.el" user-emacs-directory))
-
-
-;;----------------------------------------------------------------------------
-;; protocol buffer
-;;----------------------------------------------------------------------------
-(use-package protobuf-mode
-  :ensure t)
-
-
-;;----------------------------------------------------------------------------
-;; Rust
-;;----------------------------------------------------------------------------
-(add-to-path (expand-file-name ".cargo/bin" "~"))
-
-(use-package rust-mode
-  :ensure t
-  :pin melpa
-  :mode "\\.rs\\'"
-  :config
-  (setq rust-format-on-save nil)
-  (use-package flycheck-rust
-    :ensure t
-    :pin melpa
-    :after flycheck
-    :commands flycheck-rust-setup
-    :init
-    (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
-  (use-package flycheck-inline
-    :ensure t
-    :pin melpa
-    :after flycheck
-    :init
-    (add-hook 'flycheck-mode-hook #'flycheck-inline-mode)))
-
-(use-package racer
-  :ensure t
-  :pin melpa
-  :commands racer-mode
-  ;; :hook
-  ;; ((rust-mode . racer-mode)
-  ;;  (rust-mode . eldoc-mode))
-  :init
-  (add-hook 'rust-mode-hook 'racer-mode)
-  (add-hook 'racer-mode-hook 'eldoc-mode)
-  (setq racer-rust-src-path (shell-command-to-string "echo -n `rustc --print sysroot`/lib/rustlib/src/rust/src"))
-  :bind (:map rust-mode-map
-         ("M-." . racer-find-definition))
-  :config
-  (use-package company-racer
-    :ensure t
-    :pin melpa
-    :config
-    (add-to-list 'company-backends 'company-racer)
-    (setq company-tooltip-align-annotations t)))
-
-(use-package cargo
-  :ensure t
-  :pin melpa
-  :commands cargo-minor-mode
-  ;; :hook (rust-mode . cargo-minor-mode)
-  :init
-  (add-hook 'rust-mode-hook 'cargo-minor-mode)
-  (add-hook 'cargo-process-mode-hook (lambda ()
-                                       (setq-local truncate-lines nil))))
-
-
-;;----------------------------------------------------------------------------
-;; Golang
-;;----------------------------------------------------------------------------
-(add-to-path (expand-file-name "go/bin" "~"))
-
-(use-package go-mode
-  :ensure t
-  :mode "\\.go\\'"
-  :bind (:map go-mode-map
-              ("M-." . godef-jump)
-              ("M-," . pop-tag-mark))
-  :config
-  (add-hook 'go-mode-hook
-            (lambda ()
-              (setq tab-width 4)
-              (flycheck-mode)
-              (add-hook 'before-save-hook 'gofmt-before-save)
-              ;; Customize compile command to run go build
-              (if (not (string-match "go" compile-command))
-                  (set (make-local-variable 'compile-command)
-                       "go build -v && go test -v && go vet"))
-              (setq gofmt-command "goimports")
-              (use-package go-guru
-                :config (go-guru-hl-identifier-mode))
-              (use-package company-go
-                :config (set (make-local-variable 'company-backends)
-                             '(company-go))
-                (company-mode))
-              (use-package gotest
-                :bind (("C-c , m" . go-test-current-file)
-                       ("C-c , s" . go-test-current-test)
-                       ("C-c , a" . go-test-current-project)))
-              (use-package go-eldoc
-                :init
-                (add-hook 'go-mode-hook 'go-eldoc-setup)))))
-
-;; TODO go-projectile
-
-
-;;----------------------------------------------------------------------------
-;; Java
-;;----------------------------------------------------------------------------
-(use-package groovy-mode
-  :ensure t)
-
-(use-package gradle-mode
-  :ensure t)
-
-(use-package autodisass-java-bytecode
-  :ensure t
-  :defer t)
-
-(use-package meghanada
-  :ensure t
-  :commands (meghanada-mode)
-  :bind
-  (:map meghanada-mode-map
-        ("C-S-t" . meghanada-switch-testcase)
-        ("M-RET" . meghanada-local-variable)
-        ("C-M-." . helm-imenu)
-        ("M-r" . meghanada-reference)
-        ("M-t" . meghanada-typeinfo)
-        ("C-z" . hydra-meghanada/body))
-  :init
-  (add-hook 'java-mode-hook
-            (lambda ()
-              (meghanada-mode t)
-              (gradle-mode t)))
-  (add-hook 'groovy-mode-hook
-            (lambda ()
-              (gradle-mode t)))
-  ;; (bind-key "C-c M-." 'meghanada-jump-declaration java-mode-map)
-  :config
-  (use-package realgud
-    :ensure t)
-  (setq meghanada-auto-start nil)
-  (setq meghanada-server-remote-debug t)
-  (setq meghanada-javac-xlint "-Xlint:all,-processing"))
-
-(defhydra hydra-meghanada (:hint nil :exit t)
-"
-^Edit^                           ^Tast or Task^
-^^^^^^-------------------------------------------------------
-_f_: meghanada-compile-file      _m_: meghanada-restart
-_c_: meghanada-compile-project   _t_: meghanada-run-task
-_o_: meghanada-optimize-import   _j_: meghanada-run-junit-test-case
-_s_: meghanada-switch-test-case  _J_: meghanada-run-junit-class
-_v_: meghanada-local-variable    _R_: meghanada-run-junit-recent
-_i_: meghanada-import-all        _r_: meghanada-reference
-_g_: magit-status                _T_: meghanada-typeinfo
-_l_: helm-ls-git-ls
-_q_: exit
-"
-  ("f" meghanada-compile-file)
-  ("m" meghanada-restart)
-
-  ("c" meghanada-compile-project)
-  ("o" meghanada-optimize-import)
-  ("s" meghanada-switch-test-case)
-  ("v" meghanada-local-variable)
-  ("i" meghanada-import-all)
-
-  ("g" magit-status)
-  ("l" helm-ls-git-ls)
-
-  ("t" meghanada-run-task)
-  ("T" meghanada-typeinfo)
-  ("j" meghanada-run-junit-test-case)
-  ("J" meghanada-run-junit-class)
-  ("R" meghanada-run-junit-recent)
-  ("r" meghanada-reference)
-
-  ("q" exit)
-  ("z" nil "leave"))
-
-
-;;----------------------------------------------------------------------------
-;; Paredit
-;;----------------------------------------------------------------------------
-(use-package paredit
-  :ensure t
-  :diminish paredit-mode
-  :init
-  (use-package paredit-everywhere
-    :ensure t))
-
-
-;;----------------------------------------------------------------------------
-;; Emacs Lisp
-;;----------------------------------------------------------------------------
-(add-hook 'emacs-lisp-mode-hook (lambda ()
-                                  (setq indent-tabs-mode nil)
-                                  (turn-on-eldoc-mode)
-                                  (eldoc-add-command
-                                   'paredit-backward-delete
-                                   'paredit-close-round)
-                                  (paredit-mode t)))
-(add-hook 'lisp-interaction-mode-hook (lambda () (paredit-mode t)))
-(add-hook 'ielm-mode-hook (lambda () (paredit-mode t)))
-
-
-;;----------------------------------------------------------------------------
-;; Common Lisp & SLIME
-;;----------------------------------------------------------------------------
-(add-hook 'lisp-mode-hook (lambda ()
-                            (setq indent-tabs-mode nil)
-                            (paredit-mode t)
-                            (helm-gtags-mode 1)))
-
-(use-package slime
-  :ensure t
-  :commands slime
-  :init
-  (defconst slime-helper-file (expand-file-name "~/quicklisp/slime-helper.el"))
-  (when (file-exists-p slime-helper-file)
-    (load slime-helper-file))
-  (setq inferior-lisp-program (or (executable-find "sbcl")
-                                  (executable-find "/usr/bin/sbcl")
-                                  (executable-find "/usr/local/bin/sbcl")
-                                  "sbcl"))
-  :config
-  (require 'slime-autoloads)
-  (slime-setup '(slime-fancy))
-  (add-hook 'slime-repl-mode-hook (lambda () (paredit-mode t))))
-
-
-;;----------------------------------------------------------------------------
-;; Clojure & CIDER
-;;----------------------------------------------------------------------------
-(use-package clojure-mode
-  :ensure t
-  :config
-  (use-package flycheck-clojure
-    :ensure t
-    :after flycheck
-    :commands flycheck-clojure-setup
-    :init
-    (add-hook 'flycheck-mode-hook #'flycheck-clojure-setup))
-  (add-hook 'clojure-mode-hook (lambda ()
-                                 (setq indent-tabs-mode nil)
-
-                                 ;; from Emacs and Clojure, a Lispy Love Affair
-                                 (setq clojure-indent-style :always-align)
-                                 ;; (put-clojure-indent 'symbol 2)
-                                 ;; (put-clojure-indent 'GET 2)
-                                 ;; (define-clojure-indent
-                                 ;;   (-> 1)
-                                 ;;   (letfn '(1 ((:defn)) nil))
-                                 ;;   (defrecord '(2 :form :form (1))))
-
-                                 (paredit-mode t)
-                                 (subword-mode t))))
-
-(use-package cider
-  :ensure t
-  :commands (cider cider-connect cider-jack-in)
-  :config
-  (add-hook 'cider-mode-hook 'eldoc-mode)
-  (add-hook 'cider-repl-mode-hook (lambda ()
-                                    (turn-on-eldoc-mode)
-                                    (paredit-mode t)
-                                    (subword-mode t))))
-
-
-;;----------------------------------------------------------------------------
-;; Scala
-;;----------------------------------------------------------------------------
-(use-package ensime
-  :ensure t)
-
-(use-package scala-mode
-  :interpreter
-  ("scala" . scala-mode)
-  :config
-  (add-hook 'scala-mode-hook 'ensime-scala-mode-hook))
-
-(use-package sbt-mode
-  :commands sbt-start sbt-command
-  :config
-  ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
-  ;; allows using SPACE when in the minibuffer
-  (substitute-key-definition 'minibuffer-complete-word
-                             'self-insert-command
-                             minibuffer-local-completion-map))
-
-
-;;----------------------------------------------------------------------------
-;; scheme & geiser
-;;----------------------------------------------------------------------------
-(add-hook 'scheme-mode-hook (lambda ()
-                              (setq indent-tabs-mode nil)
-                              (paredit-mode t)
-                              (helm-gtags-mode 1)))
-
-(use-package geiser
-  :ensure t
-  :init
-  (setq geiser-active-implementations '(guile))
-  (setq geiser-guile-binary (or (executable-find "guile")
-                                (executable-find "/usr/bin/guile")
-                                (executable-find "/usr/local/bin/guile")
-                                "guile")))
-
 
 ;;----------------------------------------------------------------------------
 ;; Python
@@ -1105,29 +688,6 @@ _q_: exit
 
 
 ;;----------------------------------------------------------------------------
-;; Erlang
-;;----------------------------------------------------------------------------
-(use-package erlang
-  :ensure t
-  ;; :config (require 'erlang-start)
-  )
-
-;; (use-package company-distel
-;;   :ensure t
-;;   :config
-;;   (use-package company-distel-frontend
-;;     :ensure t)
-;;   (add-to-list 'company-backends 'company-distel))
-
-
-;;----------------------------------------------------------------------------
-;; Elixir
-;;----------------------------------------------------------------------------
-(use-package elixir-mode
-  :ensure t)
-
-
-;;----------------------------------------------------------------------------
 ;; Lua
 ;;----------------------------------------------------------------------------
 (add-hook 'lua-mode-hook (lambda () (helm-gtags-mode 1)))
@@ -1180,14 +740,6 @@ _q_: exit
 
 
 ;;----------------------------------------------------------------------------
-;; OpenCL
-;;----------------------------------------------------------------------------
-(use-package opencl-mode
-  :ensure t
-  :mode "\\.cl$")
-
-
-;;----------------------------------------------------------------------------
 ;; YAML
 ;;----------------------------------------------------------------------------
 (use-package yaml-mode
@@ -1198,7 +750,7 @@ _q_: exit
 
 
 ;;----------------------------------------------------------------------------
-;; YAML
+;; TOML
 ;;----------------------------------------------------------------------------
 (use-package toml-mode
   :ensure t)
@@ -1210,13 +762,6 @@ _q_: exit
 (use-package markdown-mode
   :ensure t
   :config (push 'markdown-mode whitespace-cleanup-mode-ignore-modes))
-
-
-;;----------------------------------------------------------------------------
-;; Vala
-;;----------------------------------------------------------------------------
-;; (use-package vala-mode
-;;   :ensure t)
 
 
 ;;----------------------------------------------------------------------------
