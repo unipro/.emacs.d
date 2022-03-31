@@ -152,8 +152,9 @@
         dired-recursive-deletes 'top
         dired-listing-switches "-lahp")
   (use-package dired-x
-              :config
+              :init
               (setq dired-omit-mode t)
+              :config
               (setq-default dired-omit-files-p t)
               (setq dired-omit-files "^\\.?#\\|^\\.$\\|^\\.\\.$\\|^\\..+$")))
 
