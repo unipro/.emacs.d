@@ -201,10 +201,10 @@
 
 (setq undo-limit 100000)
 
-(use-package undo-tree
-  :ensure t
-  :diminish undo-tree-mode
-  :init (global-undo-tree-mode t))
+;; (use-package undo-tree
+;;   :ensure t
+;;   :diminish undo-tree-mode
+;;   :init (global-undo-tree-mode t))
 
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
