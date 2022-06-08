@@ -2,7 +2,7 @@
 #+author: Ian
 #+date: <2022-06-08 Wed>
 
-To install, clone this repo to ~\~/.emacs.d~
+To install, clone this repo to ~​~/.emacs.d~
 
 #+BEGIN_SRC shell-script
 git clone https://github.com/unipro/.emacs.d.git ~/.emacs.d
